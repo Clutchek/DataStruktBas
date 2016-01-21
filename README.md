@@ -1,2 +1,2 @@
 # DataStruktBas
-Repo för labbuppgifter i TDA357 och DAT416
+Repo för labbuppgifter i TDA357 och TDA416
