@@ -6,7 +6,7 @@ public class Lab2a {
       double[] simpleArray = poly.clone();
 
       double lowestVal;
-      int index;
+      int index = 0;
 
 
 
@@ -25,7 +25,16 @@ public class Lab2a {
             index = i;
           }
         }
-        //remove
+          //remove
+          double[] tempArray = new double[simpleArray.length-2];
+          for(int i = 0; i < tempArray.length; i=i+2){
+              if(i >= index){
+                  tempArray[i] = simpleArray[i+2];
+              }else{
+                  tempArray[i] = simpleArray[i];
+              }
+          }
+          simpleArray = tempArray;
 
       }
     return simpleArray;
