@@ -5,33 +5,29 @@ public class Lab2a {
 
       double[] simpleArray = poly.clone();
 
-
       double lowestVal;
       int index;
 
 
 
-      while((simpleArray.length)/2 > k){
+      while((simpleArray.length)/2 > k) {
 
         //initialize lowestVal
 
-        lowestVal = getPointValue(2,simpleArray);
+        lowestVal = getPointValue(2, simpleArray);
 
-        for(int i = 4; i<simpleArray.length-2; i=i+2){
+        for (int i = 4; i < simpleArray.length - 2; i = i + 2) {
 
-          val = getPointValue(i,simpleArray);
+          val = getPointValue(i, simpleArray);
 
-          if(val < lowestVal){
+          if (val < lowestVal) {
             lowestVal = val;
             index = i;
           }
-
-          //remove
-
         }
+        //remove
+
       }
-
-
     return simpleArray;
 
   }
