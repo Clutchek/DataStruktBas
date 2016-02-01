@@ -1,12 +1,13 @@
 public class Lab2a {
-  public static double[] simplifyShape(double[] poly, int k)
-  {
+  public static double[] simplifyShape(double[] poly, int k) {
       double l1,l2,l3;
 
+      double[] simpleArray = poly.clone();
 
+      double lowestValueIndex;
 
       while(poly.length > k){
-        for(int i = 2; i<poly.length; i++){
+        for(int i = 2; i<poly.length; i=i+2){
 
         }
       }
