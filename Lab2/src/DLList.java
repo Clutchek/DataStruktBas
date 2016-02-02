@@ -51,14 +51,14 @@ public class DLList<E> {
    * @return    the node of the list's first element, null if list is empty
    */
   public Node getFirst() {
-      // TODO
+      return this.first;
   }
   
   /**
    * @return    the node of the list's last element, null if list is empty
    */
   public Node getLast() {
-      // TODO
+      return this.last;
   }
   
   /** inserts a new element after a specified node
