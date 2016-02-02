@@ -7,7 +7,7 @@ public class Point implements Comparable<Point>{
 
     private double value;
 
-    public Point(int x,int y,int value){
+    public Point(double x,double y,double value){
         this.x = x;
         this.y = y;
         this.value = value;

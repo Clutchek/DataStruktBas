@@ -1,13 +1,36 @@
 import java.util.PriorityQueue;
+import DLList.Node;
 
 
 public class Lab2b {
-  public static double[] simplifyShape(double[] poly, int k)
-  {
-      // TODO
+  public static double[] simplifyShape(double[] poly, int k) {
+    PriorityQueue<Node> queue = new PriorityQueue<>((poly.length/2)-2);
+    DLList<Point> doubleList = new DLList<>();
+    for(int i = 2; i < poly.length-2; i=i+2){
+      Point newPoint = new Point(poly[i], poly[i+1], getPointValue(i, poly));
+      doubleList.addLast(newPoint);
+    }
+
+    Node node = doubleList.getFirst();
+    while(node != null){
+      queue.add(node);
+      node = node.next;
+    }
+
+    while(queue.size() > k-2){
+      Node lowestNode = queue.peek();
+      Node prev = lowestNode.prev;
+      Node next = lowestNode.next;
+
+
+    }
 
     double[] test = new double[3];
     return test;
+  }
+
+  private static void updateNodeValue(Node l){
+
   }
 
 
