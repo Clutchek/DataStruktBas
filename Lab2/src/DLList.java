@@ -23,15 +23,16 @@ public class DLList<E> {
       return this.prev;
     }
   }
-  
+
   /** first and last nodes in list, null when list is empty */
   Node first, last;
-  private int size;
   
+  private int size;
+
   DLList() {
     first = last = null;
   }
-  
+
   /** inserts an element at the beginning of the list
    * @param e   the new element value
    * @return    the node holding the added element
@@ -58,19 +59,19 @@ public class DLList<E> {
       size++;
       return lastNode;
   }
-  
+
   /**
    * @return    the node of the list's first element, null if list is empty
    */
   public Node getFirst() {
-      return this.first;
+      // TODO
   }
-  
+
   /**
    * @return    the node of the list's last element, null if list is empty
    */
   public Node getLast() {
-      return this.last;
+      // TODO
   }
   
   /** inserts a new element after a specified node
