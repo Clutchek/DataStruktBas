@@ -36,6 +36,7 @@ public class DLList<E extends Comparable<E>> {
 
   DLList() {
     first = last = null;
+      size = 0;
   }
 
   /** inserts an element at the beginning of the list
@@ -49,6 +50,9 @@ public class DLList<E extends Comparable<E>> {
         first.prev = firstNode;
       }
       first = firstNode;
+      if(last == null){
+        last = first;
+      }
       size++;
       return firstNode;
   }
@@ -64,6 +68,9 @@ public class DLList<E extends Comparable<E>> {
       }
       lastNode.prev = last;
       last = lastNode;
+      if(first == null){
+          first = last;
+      }
       size++;
       return lastNode;
   }
@@ -133,4 +140,8 @@ public class DLList<E extends Comparable<E>> {
       //java's gc should take care of the rest
       l = null;
   }
+
+    public int getSize(){
+        return size;
+    }
 }

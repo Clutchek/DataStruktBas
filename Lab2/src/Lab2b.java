@@ -4,44 +4,38 @@ import DLList.Node;
 
 public class Lab2b {
   public static double[] simplifyShape(double[] poly, int k) {
-    PriorityQueue<Node> queue = new PriorityQueue<>((poly.length/2)-2);
+    PriorityQueue<Node> queue = new PriorityQueue<>((poly.length/2));
     DLList<Point> doubleList = new DLList<>();
-    for(int i = 2; i < poly.length-2; i=i+2){
+    for(int i = 0; i < poly.length; i=i+2){
       Point newPoint = new Point(poly[i], poly[i+1], getPointValue(i, poly));
       doubleList.addLast(newPoint);
-    }
-    
-    Node<Point> node = doubleList.getFirst();
-    while(node != null){
-      queue.add(node);
-      node = node.next;
+      queue.add(doubleList.getLast());
     }
 
-    while(queue.size() > k-2){
+    while(doubleList.getSize() > k){
       Node lowestNode = queue.remove();
       Node prev = lowestNode.prev;
       Node next = lowestNode.next;
-      doubleList.remove(lowestNode);
-      updateNodeValue(prev);
-      updateNodeValue(next);
+      if( prev != null && next != null ){
+        doubleList.remove(lowestNode);
+        updateNodeValue(prev);
+        updateNodeValue(next);
+      }
     }
-    Object[] remainingNodes = queue.toArray();
     double[] result = new double[k*2];
-
-    result[0] = poly[0];
-    result[1] = poly[1];
-    result[k-1] = poly[poly.length-2];
-    result[k] = poly[poly.length-1];
-    for(int i = 2; i <result.length-2; i = i+2 ){
-      Point p = (Point)remainingNodes[i/2];
-      result[i] = p.getX();
-      result[i+1] = p.getY();
-    }
+    fillArrayWithNodes(result, 0, doubleList.getFirst());
     return result;
   }
 
-  private static void updateNodeValue(Node<Point> l){
+  private static void fillArrayWithNodes(double[] list, int index, Node<Point> node){
+    if(node != null){
+      list[index] = node.elt.getX();
+      list[index+1] = node.elt.getY();
+      fillArrayWithNodes(list, index+2, node.next);
+    }
+  }
 
+  private static void updateNodeValue(Node<Point> l){
     double pointValue = getPointValue((Point)l.prev.elt, l.elt, (Point)l.next.elt);
     l.elt.setValue(pointValue);
     
