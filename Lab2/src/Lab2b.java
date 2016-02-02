@@ -1,10 +1,8 @@
 import java.util.PriorityQueue;
-import DLList.Node;
-
 
 public class Lab2b {
   public static double[] simplifyShape(double[] poly, int k) {
-    PriorityQueue<Node> queue = new PriorityQueue<>((poly.length/2));
+    PriorityQueue<DLList.Node> queue = new PriorityQueue<>((poly.length/2));
     DLList<Point> doubleList = new DLList<>();
     for(int i = 0; i < poly.length; i=i+2){
       Point newPoint = new Point(poly[i], poly[i+1], getPointValue(i, poly));
@@ -13,9 +11,9 @@ public class Lab2b {
     }
 
     while(doubleList.getSize() > k){
-      Node lowestNode = queue.remove();
-      Node prev = lowestNode.prev;
-      Node next = lowestNode.next;
+      DLList.Node lowestNode = queue.remove();
+      DLList.Node prev = lowestNode.prev;
+      DLList.Node next = lowestNode.next;
       if( prev != null && next != null ){
         doubleList.remove(lowestNode);
         updateNodeValue(prev);
@@ -27,7 +25,7 @@ public class Lab2b {
     return result;
   }
 
-  private static void fillArrayWithNodes(double[] list, int index, Node<Point> node){
+  private static void fillArrayWithNodes(double[] list, int index, DLList.Node<Point> node){
     if(node != null){
       list[index] = node.elt.getX();
       list[index+1] = node.elt.getY();
@@ -35,7 +33,7 @@ public class Lab2b {
     }
   }
 
-  private static void updateNodeValue(Node<Point> l){
+  private static void updateNodeValue(DLList.Node<Point> l){
     double pointValue = getPointValue((Point)l.prev.elt, l.elt, (Point)l.next.elt);
     l.elt.setValue(pointValue);
     
