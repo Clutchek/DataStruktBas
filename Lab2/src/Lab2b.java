@@ -6,7 +6,8 @@ public class Lab2b {
   {
       // TODO
 
-
+    double[] test = new double[3];
+    return test;
   }
 
 
