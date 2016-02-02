@@ -26,7 +26,7 @@ public class DLList<E> {
 
   /** first and last nodes in list, null when list is empty */
   Node first, last;
-  
+
   private int size;
 
   DLList() {
@@ -40,6 +40,9 @@ public class DLList<E> {
   public Node addFirst(E e) {
       Node firstNode = new Node(e);
       firstNode.next = first;
+      if(first != null){
+        first.prev = firstNode;
+      }
       first = firstNode;
       size++;
       return firstNode;
@@ -64,14 +67,14 @@ public class DLList<E> {
    * @return    the node of the list's first element, null if list is empty
    */
   public Node getFirst() {
-      // TODO
+      return first;
   }
 
   /**
    * @return    the node of the list's last element, null if list is empty
    */
   public Node getLast() {
-      // TODO
+      return last;
   }
   
   /** inserts a new element after a specified node
@@ -87,7 +90,7 @@ public class DLList<E> {
         nextNode.next = l.next;
         nextNode.prev = l;
         l.next = nextNode;
-
+        size++;
         return nextNode;
       }
   }
@@ -98,13 +101,30 @@ public class DLList<E> {
     * @return    the node holding the inserted element
     */
   public Node insertBefore(E e, Node l) {
-      // TODO
+      if(l.prev == null){
+        return addFirst(e);
+      }else{
+        Node prevNode = new Node(e);
+        prevNode.next = l;
+        prevNode.prev = l.prev;
+        l.prev = prevNode;
+        size++;
+        return prevNode;
+      }
   }
 
   /** removes an element
     * @param l   then node containing the element that will be removed, must be non-null and a node belonging to this list
     */
   public void remove(Node l) {
-      // TODO
+      if(l == null){
+        throw new IllegalArgumentException();
+      }
+      Node prev = l.prev;
+      Node next = l.next;
+      prev.next = next;
+      next.prev = prev;
+      //java's gc should take care of the rest
+      l = null;
   }
 }
