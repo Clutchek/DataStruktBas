@@ -1,7 +1,7 @@
 /** Doubly-linked list with user access to nodes
  */
 public class DLList<E extends Comparable<E>> {
-  public class Node<E extends Comparable<E>> implements Comparable<Node<E>>{
+  public static class Node<E extends Comparable<E>> implements Comparable<Node<E>>{
     /** The contents of the node is public */
     public E elt;
 

@@ -10,26 +10,36 @@ public class Lab2b {
       Point newPoint = new Point(poly[i], poly[i+1], getPointValue(i, poly));
       doubleList.addLast(newPoint);
     }
-
-    Node node = doubleList.getFirst();
+    Node<Point> node = doubleList.getFirst();
     while(node != null){
       queue.add(node);
       node = node.next;
     }
 
     while(queue.size() > k-2){
-      Node lowestNode = queue.peek();
+      Node lowestNode = queue.remove();
       Node prev = lowestNode.prev;
       Node next = lowestNode.next;
-
-
+      doubleList.remove(lowestNode);
+      updateNodeValue(prev);
+      updateNodeValue(next);
     }
+    Object[] remainingNodes = queue.toArray();
+    double[] result = new double[k*2];
 
-    double[] test = new double[3];
-    return test;
+    result[0] = poly[0];
+    result[1] = poly[1];
+    result[k-1] = poly[poly.length-2];
+    result[k] = poly[poly.length-1];
+    for(int i = 2; i <result.length-2; i = i+2 ){
+      Point p = (Point)remainingNodes[i/2];
+      result[i] = p.getX();
+      result[i+1] = p.getY();
+    }
+    return result;
   }
 
-  private static void updateNodeValue(Node l){
+  private static void updateNodeValue(Node<Point> l){
 
   }
 
