@@ -15,6 +15,7 @@ public class Lab2a {
         //initialize lowestVal
 
         lowestVal = getPointValue(2, simpleArray);
+          index = 2;
 
         for (int i = 4; i < simpleArray.length - 2; i = i + 2) {
 
@@ -27,7 +28,7 @@ public class Lab2a {
         }
           //remove
           double[] tempArray = new double[simpleArray.length-2];
-          for(int i = 0; i < tempArray.length; i=i+2){
+          for(int i = 0; i < tempArray.length; i++){
               if(i >= index){
                   tempArray[i] = simpleArray[i+2];
               }else{
@@ -37,6 +38,10 @@ public class Lab2a {
           simpleArray = tempArray;
 
       }
+      for(double d: simpleArray){
+          System.out.println(d);
+      }
+
     return simpleArray;
 
   }
