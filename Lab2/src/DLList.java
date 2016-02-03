@@ -5,7 +5,7 @@ public class DLList<E extends Comparable<E>> {
     /** The contents of the node is public */
     public E elt;
 
-    protected Node prev, next;
+    protected Node<E> prev, next;
 
     Node() {
       this(null);
@@ -131,6 +131,12 @@ public class DLList<E extends Comparable<E>> {
   public void remove(Node l) {
       if(l == null){
         throw new IllegalArgumentException();
+      }
+      if(l == last){
+          last = l.prev;
+      }
+      if(l == first){
+          first = l.next;
       }
       Node prev = l.prev;
       Node next = l.next;

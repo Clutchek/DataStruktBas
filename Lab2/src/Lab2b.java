@@ -4,20 +4,34 @@ public class Lab2b {
   public static double[] simplifyShape(double[] poly, int k) {
     PriorityQueue<DLList.Node> queue = new PriorityQueue<>((poly.length/2));
     DLList<Point> doubleList = new DLList<>();
-    for(int i = 0; i < poly.length; i=i+2){
+
+    //add first element
+    doubleList.addFirst(new Point(poly[0], poly[1], 0));
+
+    for(int i = 2; i < poly.length-2; i=i+2){
       Point newPoint = new Point(poly[i], poly[i+1], getPointValue(i, poly));
       doubleList.addLast(newPoint);
       queue.add(doubleList.getLast());
     }
+    Point point = new Point(poly[poly.length-2], poly[poly.length-1], 0);
+    doubleList.addLast(point);
 
     while(doubleList.getSize() > k){
-      DLList.Node lowestNode = queue.remove();
+      DLList.Node lowestNode = queue.poll();
       DLList.Node prev = lowestNode.prev;
       DLList.Node next = lowestNode.next;
       if( prev != null && next != null ){
         doubleList.remove(lowestNode);
-        updateNodeValue(prev);
-        updateNodeValue(next);
+        queue.remove(prev);
+        queue.remove(next);
+        if(prev.prev != null) {
+          updateNodeValue(prev);
+        }
+        if(next.next != null) {
+          updateNodeValue(next);
+        }
+        queue.add(prev);
+        queue.add(next);
       }
     }
     double[] result = new double[k*2];
@@ -34,6 +48,8 @@ public class Lab2b {
   }
 
   private static void updateNodeValue(DLList.Node<Point> l){
+    System.out.println("l.prev.elt:" + l.next);
+    System.out.println("l.next.elt:" + l.next.elt);
     double pointValue = getPointValue((Point)l.prev.elt, l.elt, (Point)l.next.elt);
     l.elt.setValue(pointValue);
     
