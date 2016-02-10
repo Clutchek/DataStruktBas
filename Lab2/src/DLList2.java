@@ -1,11 +1,11 @@
 /** Doubly-linked list with user access to nodes
  */
-public class DLList<E> {
-    public class Node {
+public class DLList2<E extends Comparable<E>> {
+    public static class Node<E extends Comparable<E>> implements Comparable<Node<E>>{
         /** The contents of the node is public */
         public E elt;
 
-        protected Node prev, next;
+        protected Node<E> prev, next;
 
         Node() {
             this(null);
@@ -15,7 +15,6 @@ public class DLList<E> {
             prev = next = null;
         }
 
-
         public Node getNext() {
             return this.next;
         }
@@ -23,13 +22,21 @@ public class DLList<E> {
         public Node getPrev() {
             return this.prev;
         }
+        public int compareTo(Node<E> node){
+            return this.elt.compareTo(node.elt);
+        }
+
+
     }
 
     /** first and last nodes in list, null when list is empty */
     Node first, last;
 
-    DLList() {
+    private int size;
+
+    DLList2() {
         first = last = null;
+        size = 0;
     }
 
     /** inserts an element at the beginning of the list
@@ -46,6 +53,7 @@ public class DLList<E> {
         if(last == null){
             last = first;
         }
+        size++;
         return firstNode;
     }
 
@@ -63,6 +71,7 @@ public class DLList<E> {
         if(first == null){
             first = last;
         }
+        size++;
         return lastNode;
     }
 
@@ -93,6 +102,7 @@ public class DLList<E> {
             nextNode.next = l.next;
             nextNode.prev = l;
             l.next = nextNode;
+            size++;
             return nextNode;
         }
     }
@@ -110,6 +120,7 @@ public class DLList<E> {
             prevNode.next = l;
             prevNode.prev = l.prev;
             l.prev = prevNode;
+            size++;
             return prevNode;
         }
     }
@@ -118,18 +129,25 @@ public class DLList<E> {
      * @param l   then node containing the element that will be removed, must be non-null and a node belonging to this list
      */
     public void remove(Node l) {
+        if(l == null){
+            throw new IllegalArgumentException();
+        }
         if(l == last){
             last = l.prev;
         }
         if(l == first){
             first = l.next;
         }
-        //remove references
         Node prev = l.prev;
         Node next = l.next;
         prev.next = next;
         next.prev = prev;
+        size--;
         //java's gc should take care of the rest
         l = null;
+    }
+
+    public int getSize(){
+        return size;
     }
 }
