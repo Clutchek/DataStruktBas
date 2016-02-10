@@ -23,10 +23,13 @@ public class Lab2b {
             DLList<Point>.Node lowestNode = queue.poll();
             DLList<Point>.Node prev = lowestNode.prev;
             DLList<Point>.Node next = lowestNode.next;
+            //cautionary check if the node could be last/first
             if (prev != null && next != null) {
                 doubleList.remove(lowestNode);
+                //removing and adding prev/next to update the queue
                 queue.remove(prev);
                 queue.remove(next);
+                //next and prev can be the end points, and we cant calculate their values
                 if (prev.prev != null) {
                     updateNodeValue(prev);
                 }
@@ -37,6 +40,7 @@ public class Lab2b {
                 queue.add(next);
             }
         }
+        //creating array and fills it with the nodes coordinates
         double[] result = new double[k * 2];
         fillArrayWithNodes(result, 0, doubleList.getFirst());
         return result;
@@ -51,20 +55,19 @@ public class Lab2b {
     }
 
     private static void updateNodeValue(DLList<Point>.Node l) {
-        System.out.println("l.prev.elt:" + l.next);
-        System.out.println("l.next.elt:" + l.next.elt);
         double pointValue = getPointValue(l.prev.elt, l.elt, l.next.elt);
         l.elt.setValue(pointValue);
 
     }
-
 
     private static double getDistance(double x1, double y1, double x2, double y2) {
         //Pythagorean theorem to get the distance between coordinates
         return Math.sqrt((Math.pow(x1 - x2, 2)) + (Math.pow(y1 - y2, 2)));
     }
 
+    //cannot be used for end nodes
     private static double getPointValue(Point prev, Point point, Point next) {
+        //using the given formula to calculate a points comparative value
         double l1 = getDistance(point.getX(), point.getY(), prev.getX(), prev.getY());
         double l2 = getDistance(point.getX(), point.getY(), next.getX(), next.getY());
         double l3 = getDistance(prev.getX(), prev.getY(), next.getX(), next.getY());
@@ -72,8 +75,9 @@ public class Lab2b {
         return val;
     }
 
+    //cannot be used for end nodes
     private static double getPointValue(int index, double[] simpleArray) {
-
+        //using the given formula to calculate a points comparative value
         double l1 = getDistance(simpleArray[index], simpleArray[index + 1], simpleArray[index - 2], simpleArray[index - 1]);
         double l2 = getDistance(simpleArray[index], simpleArray[index + 1], simpleArray[index + 2], simpleArray[index + 3]);
         double l3 = getDistance(simpleArray[index - 2], simpleArray[index - 1], simpleArray[index + 2], simpleArray[index + 3]);

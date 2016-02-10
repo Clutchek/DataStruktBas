@@ -5,17 +5,19 @@ public class Lab2a {
 
         double[] simpleArray = poly.clone();
 
+        //represents the lowestValue of a point in the array
         double lowestVal;
+        //the index with lowestValue
         int index = 0;
 
 
         while ((simpleArray.length) / 2 > k) {
 
-            //initialize lowestVal
-
+            //initialize lowestVal and index, end points should not be included in our calculations
             lowestVal = getPointValue(2, simpleArray);
             index = 2;
 
+            //already used second node to initialize lowestVal so starting from third point. Excludes last point as well.
             for (int i = 4; i < simpleArray.length - 2; i = i + 2) {
 
                 val = getPointValue(i, simpleArray);
@@ -25,7 +27,7 @@ public class Lab2a {
                     index = i;
                 }
             }
-            //remove
+            //remove the point with lowest value from the array
             double[] tempArray = new double[simpleArray.length - 2];
             for (int i = 0; i < tempArray.length; i++) {
                 if (i >= index) {
@@ -36,9 +38,6 @@ public class Lab2a {
             }
             simpleArray = tempArray;
 
-        }
-        for (double d : simpleArray) {
-            System.out.println(d);
         }
 
         return simpleArray;
@@ -51,7 +50,7 @@ public class Lab2a {
     }
 
     private static double getPointValue(int index, double[] simpleArray) {
-
+        //using the given formula to calculate a points comparative value
         double l1 = getDistance(simpleArray[index], simpleArray[index + 1], simpleArray[index - 2], simpleArray[index - 1]);
         double l2 = getDistance(simpleArray[index], simpleArray[index + 1], simpleArray[index + 2], simpleArray[index + 3]);
         double l3 = getDistance(simpleArray[index - 2], simpleArray[index - 1], simpleArray[index + 2], simpleArray[index + 3]);
