@@ -3,7 +3,7 @@ package Lab3;
 /**
  * Created by Rasmus on 2016-02-12.
  */
-public class SortedLinkedListSet<E extends Comparable<? super E>> implements SimpleSet{
+public class SortedLinkedListSet<E extends Comparable<? super E>> implements SimpleSet<E>{
 
     public class Node {
         /** The contents of the node is public */
@@ -45,15 +45,65 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         return size;
     }
 
-
     @Override
     public boolean add(E x) {
+        if(contains(x)){
+            return false;
+        }
+        Node node = first;
 
-        return false;
+
+
+        while ((node.next != null) && (node.elt.compareTo(x)>= 0)){
+            node = node.next;
+        }
+
+        Node newNode = new Node(x);
+        newNode.next = node.next;
+        newNode.prev = node;
+        node.next = newNode;
+
+        if(node == last){
+            last = newNode;
+        }
+        if(node == first){
+            first = newNode;
+        }
+
+        size++;
+
+        return true;
+
     }
 
     @Override
     public boolean remove(E x) {
+
+        if(contains(x)){
+            return false;
+        }
+
+        Node node = first;
+
+        while(node != null){
+            if(node.elt.equals(x)){
+                if(node == last){
+
+                    last = node.prev;
+                }
+                if(node == first){
+                    
+                    first = node.next;
+                }
+                Node prev = node.prev;
+                Node next = node.next;
+                prev.next = next;
+                next.prev = prev;
+                node = null;
+                return true;
+            }
+            node = node.next;
+        }
         return false;
     }
 
@@ -68,4 +118,6 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         }
         return false;
     }
+
+
 }
