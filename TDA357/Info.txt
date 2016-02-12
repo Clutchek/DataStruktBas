@@ -1,5 +1,0 @@
-Here are your connection information: 
-username: tda357_042 
-database: tda357_042 
-password: TQAz5SxP 
-For instructions, see http://www.cse.chalmers.se/edu/course/TDA357/VT2016/pgtips/ 
