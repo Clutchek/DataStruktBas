@@ -47,24 +47,46 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
     @Override
     public boolean add(E x) {
+        if(first != null){
+            Node noder = first;
+            while(noder.next != null){
+                System.out.print("" + noder.elt + " ");
+                noder = noder.next;
+            }
+            System.out.print("\n");
+
+        }
         if(contains(x)){
             return false;
         }
         Node node = first;
+        if(first == null){
 
-
-
-        while ((node.next != null) && (node.elt.compareTo(x)>= 0)){
-            node = node.next;
-        }
-
-        Node newNode = new Node(x);
-        newNode.next = node.next;
-        newNode.prev = node;
-        node.next = newNode;
-
-        if(node == last){
+            Node newNode = new Node(x);
+            first = newNode;
             last = newNode;
+            size++;
+            return true;
+        }
+        boolean compareOK= true;
+        while ((node.next != null) && compareOK){
+            if(node.elt.compareTo(x)>= 0){
+                compareOK = false;
+            }else{
+                node = node.next;
+            }
+        }
+        Node newNode = new Node(x);
+        if(node.next == null){
+            node.next = newNode;
+            newNode.prev = node;
+            newNode.next = null;
+            last = newNode;
+        }else{
+            newNode.next = node;
+            newNode.prev = node.prev;
+            node.prev = newNode;
+
         }
         if(node == first){
             first = newNode;
@@ -78,8 +100,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
     @Override
     public boolean remove(E x) {
-
-        if(contains(x)){
+        if(!contains(x)){
             return false;
         }
 
@@ -88,18 +109,21 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         while(node != null){
             if(node.elt.equals(x)){
                 if(node == last){
-
                     last = node.prev;
                 }
                 if(node == first){
-                    
                     first = node.next;
                 }
                 Node prev = node.prev;
                 Node next = node.next;
-                prev.next = next;
-                next.prev = prev;
+                if(prev != null){
+                    prev.next = next;
+                }
+                if(next != null){
+                    next.prev = prev;
+                }
                 node = null;
+                size--;
                 return true;
             }
             node = node.next;
