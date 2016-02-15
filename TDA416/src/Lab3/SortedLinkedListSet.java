@@ -47,52 +47,56 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
     @Override
     public boolean add(E x) {
-        if(first != null){
-            Node noder = first;
-            while(noder.next != null){
-                System.out.print("" + noder.elt + " ");
-                noder = noder.next;
-            }
-            System.out.print("\n");
 
-        }
         if(contains(x)){
             return false;
         }
-        Node node = first;
-        if(first == null){
 
+
+        if(first == null){
             Node newNode = new Node(x);
             first = newNode;
             last = newNode;
             size++;
             return true;
         }
+
+        Node node = first;
+
         boolean compareOK= true;
-        while ((node.next != null) && compareOK){
-            if(node.elt.compareTo(x)>= 0){
+
+        Node previousNode = new Node();
+
+        while ((node != null) && compareOK){
+            previousNode = node;
+            if(node.elt.compareTo(x) >= 0){
                 compareOK = false;
-            }else{
-                node = node.next;
             }
+            node = node.next;
         }
         Node newNode = new Node(x);
-        if(node.next == null){
-            node.next = newNode;
-            newNode.prev = node;
-            newNode.next = null;
+        if(node == null){ //compareOK
+            previousNode.next = newNode;
+            newNode.prev = previousNode;
             last = newNode;
         }else{
             newNode.next = node;
-            newNode.prev = node.prev;
             node.prev = newNode;
-
-        }
-        if(node == first){
-            first = newNode;
+            if(node == first){
+                first = newNode;
+            }
         }
 
         size++;
+        if(first != null){
+            Node noder = first;
+            while(noder != null){
+                System.out.print("" + noder.elt + " ");
+                noder = noder.next;
+            }
+            System.out.print("\n");
+
+        }
 
         return true;
 
