@@ -74,5 +74,21 @@ CREATE TABLE IsAttending(
 	PRIMARY KEY (student,course));
 
 
+CREATE TABLE ProgramMandatoryCourse(
+	studyProgramme VARCHAR NOT NULL references StudyProgramme(name),
+	course VARCHAR NOT NULL references Course(courseCode),
+	PRIMARY KEY (studyProgramme, course));
 
+CREATE TABLE BranchMandatoryCourse(
+	branch VARCHAR NOT NULL,
+	studyProgramme VARCHAR NOT NULL,
+	course VARCHAR NOT NULL references Course(courseCode),
+	(branch,studyProgramme) references branch(name, studyProgramme),
+	PRIMARY KEY (branch, studyProgramme, course));
 
+CREATE TABLE BranchRecommendedCourse(
+	branch VARCHAR NOT NULL,
+	studyProgramme VARCHAR NOT NULL,
+	course VARCHAR NOT NULL references Course(courseCode),
+	(branch,studyProgramme) references branch(name, studyProgramme),
+	PRIMARY KEY (branch, studyProgramme, course));
