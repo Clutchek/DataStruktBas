@@ -25,7 +25,7 @@ CREATE TABLE student(
 	name VARCHAR NOT NULL, 
 	studyProgramme VARCHAR NOT NULL, 
 	branch VARCHAR default NULL,
-	Foreign key (studyProgramme, branch​) references studyProgramme(name));
+	Foreign key (studyProgramme, branch​) references branch(name,studyProgramme));
 
 CREATE TABLE course(
 	courseCode VARCHAR primary key,
