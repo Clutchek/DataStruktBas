@@ -15,8 +15,7 @@ CREATE TABLE "hostedBy"(​
 
 CREATE TABLE branch(
 	name​ VARCHAR NOT NULL,
-	studyProgramme VARCHAR NOT NULL,
-	studyProgramme​ references studyProgramme(name),
+	studyProgramme VARCHAR NOT NULL studyProgramme​ references studyProgramme(name),
 	primary key (name, studyProgramme));
 
 CREATE TABLE student(
