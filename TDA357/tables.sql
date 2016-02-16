@@ -6,12 +6,12 @@ CREATE TABLE studyProgramme(
 	abbreviation VARCHAR NOT NULL,
 	name VARCHAR PRIMARY KEY);
 
-CREATE TABLE "hostedBy"(​
-	departmentName VARCHAR NOT NULL,
-	studyProgramme VARCHAR NOT NULL,
-	Foreign key (department) references department(name),
-	Foreign key (studyProgramme​) references studyProgramme(name),
-	primary key (department,studyProgramme));
+CREATE TABLE "hostedBy"(
+  departmentName VARCHAR NOT NULL,
+  studyProgramme VARCHAR NOT NULL,
+  Foreign key (departmentName) references department(name),
+  Foreign key (studyProgramme) references studyProgramme(name),
+  primary key (departmentName,studyProgramme));
 
 CREATE TABLE branch(
 	name​ VARCHAR NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE branch(
 	primary key (name, studyProgramme));
 
 CREATE TABLE student(
-	personalCodeNumber CHAR(10) PRIMARY KEY check regexp_matches(personalCodeNumber, 
+	personalCodeNumber CHAR(10) PRIMARY KEY, check regexp_matches(personalCodeNumber, 
     E'[0-9]')), 
 	loginId VARCHAR NOT NULL UNIQUE,
 	name VARCHAR NOT NULL, 
