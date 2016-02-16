@@ -51,12 +51,20 @@ CREATE TABLE Prerequisites(
 	PRIMARY KEY (course, requredCourse));
 
 CREATE TABLE AppliedFor(
-		student VARCHAR NOT NULL references student(personalCodeNumber),
-		restrictedCourse VARCHAR NOT NULL references restrictedCourse(course),
-		timestamp timestamp default current_timestamp,
-		UNIQUE(restrictedCourse,timestamp),
-		PRIMARY KEY (student,restrictedCourse));
-	
+	student VARCHAR NOT NULL references student(personalCodeNumber),
+	restrictedCourse VARCHAR NOT NULL references restrictedCourse(course),
+	timestamp timestamp default current_timestamp,
+	UNIQUE(restrictedCourse,timestamp),
+	PRIMARY KEY (student,restrictedCourse));
+
+
+CREATE TYPE GRADE AS ENUM('U','3','4','5');
+CREATE TABLE Graded(
+	student  VARCHAR  NOT NULL references student(personalCodeNumber),
+	course VARCHAR NOT NULL references course(courseCode),
+	grade GRADE NOT NULL,
+	PRIMARY KEY (student,course));
+
 	
 CREATE TABLE IsAttending(
 	student VARCHAR NOT NULL references student(personalCodeNumber),
