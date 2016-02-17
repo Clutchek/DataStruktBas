@@ -20,14 +20,14 @@ CREATE TABLE branch(
 	Foreign key(studyProgramme) references studyProgramme(name));
 
 CREATE TABLE student(
-	personalCodeNumber CHAR(10),
-	primary key (personalCodeNumber), 
+	personalCodeNumber CHAR(10) CONSTRAINT student_id_format CHECK(personalCodeNumber ~ '^(19|20)\d{2}(1[012]|0[1-9])[0123]\d\-\d{4}$'),
+	primary key (personalCodeNumber),
 	loginId VARCHAR NOT NULL UNIQUE,
 	name VARCHAR NOT NULL,
-	studyProgrammes VARCHAR NOT NULL, 
+	studyProgramme VARCHAR NOT NULL,
 	branch VARCHAR default NULL,
-	Foreign key (studyProgrammes) references studyProgramme(name),
-	Foreign key (branch, studyProgrammes​) references branch(name,studyProgramme));
+	foreign key (studyProgramme) references studyProgramme(name));
+	ALTER TABLE student ADD foreign key (branch, studyProgramme) references branch(name, studyProgramme);
 
 CREATE TABLE course(
 	courseCode VARCHAR primary key,
