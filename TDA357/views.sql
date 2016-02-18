@@ -12,17 +12,29 @@ CREATE VIEW Registrations AS
 	FROM appliedFor
 	UNION
 	SELECT course, student, 'registered' AS Status
-	FROM isAttending)
+	FROM isAttending
 	ORDER BY course;
 
 CREATE VIEW PassedCourses AS
 	SELECT student, coursecode, name, grade ,credits
-	FROM graded,course WHERE graded.course = course.courseCode AND graded.grade != 'U';
+	FROM graded,course 
+	WHERE graded.course = course.courseCode AND graded.grade != 'U';
+
 
 CREATE VIEW UnreadMandatory1 AS
-SELECT student.name, course
-	FROM student, programMandatoryCourse
+SELECT personalCodeNumber, course
+	FROM student, programMandatoryCourse WHERE student.studyProgramme = programMandatoryCourse.name
 	UNION
-SELECT student.name, course
-	FROM student, branchMandatoryCourse;
+SELECT personalCodeNumber, course 
+	FROM student, branchMandatoryCourse WHERE student.branch = branchMandatoryCourse.branch
+
+
+
 	
+
+
+CREATE VIEW UnreadMandatory AS
+	SELECT student, course
+	FROM student, branchMandatoryCourse, branchRecommendedCourse, programmeMandatoryCourse
+	WHERE (student.personalCodeNumber, course.coursecode)  NOT IN (SELECT student, coursecode from PassedCourses);
+
