@@ -34,7 +34,15 @@ SELECT personalCodeNumber, course
 
 
 CREATE VIEW UnreadMandatory AS
-	SELECT student, course
-	FROM student, branchMandatoryCourse, branchRecommendedCourse, programmeMandatoryCourse
-	WHERE (student.personalCodeNumber, course.coursecode)  NOT IN (SELECT student, coursecode from PassedCourses);
+	SELECT *
+	FROM(
+	SELECT personalCodeNumber as student, course
+	FROM student, branchMandatoryCourse
+	WHERE ((student.branch, student.studyProgramme) = (branchMandatoryCourse.branch,branchMandatoryCourse.studyProgramme))
+	UNION
+	SELECT personalCodeNumber as student, course
+	FROM student, programmeMandatoryCourse
+	WHERE (student.studyProgramme = programmeMandatoryCourse.studyProgramme)
+	) AS Temp
+	WHERE (student, course)  NOT IN (SELECT student, coursecode from PassedCourses);
 
