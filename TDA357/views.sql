@@ -18,19 +18,7 @@ CREATE VIEW Registrations AS
 CREATE VIEW PassedCourses AS
 	SELECT student, coursecode, name, grade ,credits
 	FROM graded,course 
-	WHERE graded.course = course.courseCode AND graded.grade != 'U';
-
-
-CREATE VIEW UnreadMandatory1 AS
-SELECT personalCodeNumber, course
-	FROM student, programMandatoryCourse WHERE student.studyProgramme = programMandatoryCourse.name
-	UNION
-SELECT personalCodeNumber, course 
-	FROM student, branchMandatoryCourse WHERE student.branch = branchMandatoryCourse.branch
-
-
-
-	
+	WHERE graded.course = course.courseCode AND graded.grade != 'U';	
 
 
 CREATE VIEW UnreadMandatory AS
