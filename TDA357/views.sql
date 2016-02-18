@@ -1,6 +1,6 @@
 
 CREATE VIEW StudentsFollowing AS
-	SELECT personalCodeNumber, name, loginId, branch, studyProgramme
+	SELECT *
 	FROM student;
 
 CREATE VIEW FinishedCourses AS
