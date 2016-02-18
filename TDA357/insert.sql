@@ -124,11 +124,11 @@ INSERT INTO isAttending values ('941204-1337','mve055');
 
 --programMandatoryCourse
 
-INSERT INTO programMandatoryCourse values('StudyProgramme2','tda416');
-INSERT INTO programMandatoryCourse values('StudyProgramme2','mve055');
-INSERT INTO programMandatoryCourse values('StudyProgramme1','tda357');
-INSERT INTO programMandatoryCourse values('StudyProgramme3','tda416');
-INSERT INTO programMandatoryCourse values('StudyProgramme4','tmv200');
+INSERT INTO programmeMandatoryCourse values('StudyProgramme2','tda416');
+INSERT INTO programmeMandatoryCourse values('StudyProgramme2','mve055');
+INSERT INTO programmeMandatoryCourse values('StudyProgramme1','tda357');
+INSERT INTO programmeMandatoryCourse values('StudyProgramme3','tda416');
+INSERT INTO programmeMandatoryCourse values('StudyProgramme4','tmv200');
 
 --branchMandatoryCourse
 INSERT INTO branchMandatoryCourse values('Branch1', 'StudyProgramme1', 'mve045');
