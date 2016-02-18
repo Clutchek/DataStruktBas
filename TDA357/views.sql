@@ -1,4 +1,13 @@
 
 CREATE VIEW StudentsFollowing AS
-	SELECT name,loginId, branch, name, studyProgramme,personalCodeNumber
-	FROM student 
+	SELECT personalCodeNumber, name, loginId, branch, studyProgramme
+	FROM student;
+
+CREATE VIEW FinishedCourses AS
+	SELECT student, coursecode, name, grade ,credits
+	FROM graded,course WHERE graded.course = course.courseCode;
+
+
+
+
+	
