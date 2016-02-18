@@ -75,7 +75,7 @@ CREATE TABLE isAttending(
 	PRIMARY KEY (student,course));
 
 
-CREATE TABLE programMandatoryCourse(
+CREATE TABLE programmeMandatoryCourse(
 	studyProgramme VARCHAR NOT NULL references StudyProgramme(name),
 	course VARCHAR NOT NULL references Course(courseCode),
 	PRIMARY KEY (studyProgramme, course));
