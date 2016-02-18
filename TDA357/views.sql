@@ -34,3 +34,12 @@ CREATE VIEW UnreadMandatory AS
 	) AS Temp
 	WHERE (student, course)  NOT IN (SELECT student, coursecode from PassedCourses);
 
+CREATE VIEW PathToGraduation AS
+ SELECT student.personalcodenumber, sum(passedcourses.credits) AS sum
+   FROM student
+   LEFT JOIN passedcourses ON student.personalcodenumber = passedcourses.student
+  GROUP BY student.personalcodenumber
+  ORDER BY student.personalcodenumber, sum;
+
+
+
