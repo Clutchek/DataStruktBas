@@ -53,7 +53,7 @@ CREATE VIEW StudentTotalCredits AS
 	GROUP BY student.personalcodenumber
 	ORDER BY student.personalcodenumber, Totalcredits;
 
-CREATE VIEW NbrOfUnreadCourses AS
+CREATE VIEW SudentUnreadCourses AS
   SELECT student.personalcodenumber as student, Count(UnreadMandatory.course) as nbrOfUnreadCourses
    FROM student
    LEFT JOIN UnreadMandatory ON student.personalcodenumber = UnreadMandatory.student
@@ -75,7 +75,7 @@ CREATE VIEW PathToGraduation AS
 	SELECT TempTable.student, totalcredits, nbrOfUnreadCourses, mathCredits, researchCredits, nbrofseminarcourses, CASE WHEN nbrOfUnreadCourses < 1 AND mathCredits >= 20 AND researchCredits >= 10 AND nbrOfSeminarCourses >= 1 THEN 'YES' ELSE 'NO' END AS qualifiedForGraduation
     FROM 
     ((StudentTotalCredits natural Join  
-    NbrOfUnreadCourses) natural Join 
+    SudentUnreadCourses) natural Join 
     StudentClassificationCredits) AS TempTable
     LEFT JOIN RecommendedPassedCourses on RecommendedPassedCourses.student = TempTable.student;
 
