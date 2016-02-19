@@ -107,6 +107,7 @@ INSERT INTO graded values ('941204-1337','mve055', '3');
 INSERT INTO graded values ('941204-1337','tmv206', '3');
 INSERT INTO graded values ('941204-1337','tda357', '3');
 INSERT INTO graded values ('941204-1337','try123', '4');
+INSERT INTO graded values ('941204-1337','tda416', '4');
 
 
 --02 will pass
@@ -114,6 +115,7 @@ INSERT INTO graded values ('941202-1337','mve045', '5');
 INSERT INTO graded values ('941202-1337','tmv206', '5');
 INSERT INTO graded values ('941202-1337','tda357', '5');
 INSERT INTO graded values ('941202-1337','try234', '5');
+INSERT INTO graded values ('941202-1337','mve055', '5');
 
 
 
