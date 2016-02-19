@@ -80,35 +80,3 @@ CREATE VIEW PathToGraduation AS
     PathToGraduation2) natural Join 
     PathToGraduation3) AS TempTable
     LEFT JOIN RecommendedPassedCourses on RecommendedPassedCourses.student = TempTable.student;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---backup
-
-  CREATE VIEW PathToGraduation2 AS
-	SELECT student.personalcodenumber as student, sum(passedcourses.credits) AS credits,
- 	sum( CASE WHEN classification = 'Math' THEN passedcourses.credits ELSE 0 END) as mathCredits
-   	FROM (student LEFT JOIN (SELECT * from (passedcourses JOIN courseClassification on passedcourses.coursecode = courseclassification.course) as passedClass ON student.personalcodenumber = passedClass.student)) as fromTable
-  	GROUP BY student.personalcodenumber
-  	ORDER BY student.personalcodenumber, sum;
