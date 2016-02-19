@@ -41,7 +41,7 @@ CREATE TABLE classification(
 
 CREATE TABLE courseClassification(
 	course VARCHAR references course(courseCode),
-	classificatiion VARCHAR references classification(name));
+	classification VARCHAR references classification(name));
 
 CREATE TABLE restrictedCourse(
 	course VARCHAR primary key references course(courseCode),
