@@ -34,18 +34,12 @@ CREATE VIEW UnreadMandatory AS
 	) AS Temp
 	WHERE (student, course)  NOT IN (SELECT student, coursecode from PassedCourses);
 
-CREATE VIEW RecomendedPasssedCourses AS
+CREATE VIEW RecommendedPassedCourses AS
 	SELECT student, credits AS RecCredits
   	FROM( SELECT distinct on (student,coursecode)*
   	FROM 
   	(PassedCourses JOIN branchRecommendedCourse
     ON PassedCourses.courseCode = branchRecommendedCourse.course )AS REC)AS SEL;
-
-
-CREATE VIEW nbrOfUnreadMandatory
-	SELECT student, count(student) as nbrOfUnreadCourses
-	FROM UnreadMandatory
-	GROUP BY student;
 
 
 CREATE VIEW PassedClass AS
@@ -55,14 +49,14 @@ CREATE VIEW PassedClass AS
 
 
 CREATE VIEW PathToGraduation1 AS
- 	SELECT student.personalcodenumber as student, sum(passedcourses.credits) AS Totalcredits
+ 	SELECT student.personalcodenumber as student, coalesce(sum(passedcourses.credits),0) AS Totalcredits
 	FROM student
 	LEFT JOIN passedcourses ON student.personalcodenumber = passedcourses.student
 	GROUP BY student.personalcodenumber
-	ORDER BY student.personalcodenumber, sum;
+	ORDER BY student.personalcodenumber, Totalcredits;
 
 CREATE VIEW PathToGraduation2 AS
-  SELECT student.personalcodenumber as student, Count(UnreadMandatory.course)
+  SELECT student.personalcodenumber as student, Count(UnreadMandatory.course) as nbrOfUnreadCourses
    FROM student
    LEFT JOIN UnreadMandatory ON student.personalcodenumber = UnreadMandatory.student
   GROUP BY student.personalcodenumber
@@ -80,12 +74,12 @@ CREATE VIEW PathToGraduation2 AS
 
 
 CREATE VIEW PathToGraduation AS
-	SELECT *
-	FROM 
-	(PathToGraduation1 Join  
-	PathToGraduation2 on student) Join 
-	PathToGraduation3 on student;
-
+	SELECT TempTable.student, totalcredits, nbrOfUnreadCourses, mathCredits, researchCredits, nbrofseminarcourses, CASE WHEN nbrOfUnreadCourses < 1 AND mathCredits >= 20 AND researchCredits >= 10 AND nbrOfSeminarCourses >= 1 THEN 'YES' ELSE 'NO' END AS qualifiedForGraduation
+    FROM 
+    ((PathToGraduation1 natural Join  
+    PathToGraduation2) natural Join 
+    PathToGraduation3) AS TempTable
+    LEFT JOIN RecommendedPassedCourses on RecommendedPassedCourses.student = TempTable.student;
 
 
 
