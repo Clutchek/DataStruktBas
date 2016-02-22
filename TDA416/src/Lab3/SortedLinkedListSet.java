@@ -52,7 +52,6 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
             return false;
         }
 
-
         if(first == null){
             Node newNode = new Node(x);
             first = newNode;
@@ -65,22 +64,37 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
         boolean compareOK= true;
 
-        Node previousNode = new Node();
-
-        while ((node != null) && compareOK){
-            previousNode = node;
+        while ((node.next != null) && compareOK){ //kan vara compareOk fel iteration
             if(node.elt.compareTo(x) >= 0){
                 compareOK = false;
+            }else{
+                node = node.next;
             }
-            node = node.next;
         }
         Node newNode = new Node(x);
-        if(node == null){ //compareOK
-            previousNode.next = newNode;
-            newNode.prev = previousNode;
-            last = newNode;
+        if(compareOK){ //compareOK
+            if(node.elt.compareTo(x) >= 0){
+                newNode.next = node;
+                newNode.prev = node.prev;
+                if(node.prev != null){
+                    node.prev.next = newNode;
+                }
+                node.prev = newNode;
+                if(node == first){
+                    first = newNode;
+                }
+            }else {
+                node.next = newNode;
+                newNode.prev = node;
+                //newNode.next = null
+                last = newNode;
+            }
         }else{
             newNode.next = node;
+            newNode.prev = node.prev;
+            if(node.prev != null){
+                node.prev.next = newNode;
+            }
             node.prev = newNode;
             if(node == first){
                 first = newNode;
@@ -88,6 +102,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         }
 
         size++;
+
         if(first != null){
             Node noder = first;
             while(noder != null){
@@ -97,7 +112,6 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
             System.out.print("\n");
 
         }
-
         return true;
 
     }
