@@ -40,7 +40,7 @@ public class TestSetCorrectness {
                 }else if(random < 0.75){
                     int randInt = randomGen.nextInt(n4);
                     if(!(splayTree.contains(randInt) == treeSet.contains(randInt))){
-                        System.out.println("Error on remove");
+                        System.out.println("Error on contains");
                         System.exit(3);
                     }
                 }else{
