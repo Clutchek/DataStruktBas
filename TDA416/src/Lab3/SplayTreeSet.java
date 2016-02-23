@@ -20,12 +20,12 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }
 
 
-        public Node getNext() {
-            return this.next;
+        public Node getRight() {
+            return this.right;
         }
 
-        public Node getPrev() {
-            return this.prev;
+        public Node getLeft() {
+            return this.left;
         }
     }
 
@@ -96,5 +96,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         node.parent = right;
 
     }
+
+    
 
 }
