@@ -15,8 +15,10 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             this(null);
         }
         Node(E elt) {
+
             this.elt = elt;
-            left = right = null;
+            parent = left = right = null;
+
         }
 
         public Node(E elt, Node<E> p) {
@@ -40,6 +42,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
     private int size = 0;
     private Node<E> currentNode = null;
 
+
     @Override
     public int size() {
         return this.size;
@@ -57,15 +60,34 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             return false;
         }
 
+        Node<E> tempNode = currentNode;
+        root = currentNode.left;
+
+        findNode(currentNode.elt, false);
+
+        root.right = tempNode.right;
+
+
+        /*
         if(currentNode.left == null){
             replace(currentNode, currentNode.right);
         }else if(currentNode.right == null){
             replace(currentNode, currentNode.left);
         }else{
 
-        }
+
+
+
+        }*/
 
         return true;
+    }
+
+    private Node<E> treeMinumum(Node<E> node){
+        while(node.left != null){
+            node = node.left;
+        }
+        return node;
     }
 
     private void replace(Node<E> current, Node replacement ) {
@@ -143,29 +165,78 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         return false;
     }
-    
-    private void splay(Node node){
+
+
+
+    public void rotateRight(Node node){
+        Node left = node.left;
+        if(left != null) {
+            node.left = left.right;
+            if (left.right != null) {
+                left.right.parent = node;
+            }
+            left.parent = node.parent;
+        }
+        if(node.parent == null){
+            root = left;
+        }else if(node == node.parent.right){
+            node.parent.right = left;
+        }else{
+            node.parent.left = left;
+        }
+        if(left != null){
+            left.right = node;
+        }
+        node.parent = left;
+    }
+
+    public void rotateLeft(Node node){
+        Node right = node.right;
+        if(right != null) {
+            node.right = right.left;
+            if (right.left != null) {
+                right.left.parent = node;
+            }
+            right.parent = node.parent;
+        }
+        if(node.parent == null){
+            root = right;
+        }else if(node == node.parent.right){
+            node.parent.right = right;
+        }else{
+            node.parent.left = right;
+        }
+        if(right != null){
+            right.left = node;
+        }
+        node.parent = right;
 
     }
 
-    private Node rotateRight(Node node){
+    public void splay(Node node){
+        while(node.parent != null){
+            if(node.parent.parent == null) {
+                //zig step
+                if (node.parent.left == node) {
+                    rotateRight(node.parent);
+                } else { //node is right child
+                    rotateLeft(node.parent);
+                }
+            }else if(node.parent.left == node && node.parent.parent.left == node.parent){ //zig-zig ver 1.
+                rotateRight(node.parent.parent);
+                rotateRight(node.parent);
+            }else if(node.parent.right == node && node.parent.parent.right == node.parent){ //zig-zig ver 2.
+                rotateLeft(node.parent.parent);
+                rotateLeft(node.parent);
+            }else if(node.parent.left == node && node.parent.parent.right == node.parent){ //zig-zag ver 1.
+                rotateRight(node.parent);
+                rotateLeft(node.parent);
+            }else{ //zig-zag ver 2. (node right child and node.parent left child)
+                rotateLeft(node.parent);
+                rotateRight(node.parent);
 
-        Node childNode = node.left;
-        node.left = childNode.right;
-        childNode.right = node;
-
-        return childNode;
-
+            }
+        }
     }
-
-    private Node rotateLeft(Node node){
-
-        Node childNode = node.right;
-        node.right= childNode.left;
-        childNode.left = node;
-
-        return childNode;
-    }
-
 
 }
