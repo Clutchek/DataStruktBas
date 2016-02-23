@@ -72,6 +72,8 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         }else if(currentNode.right != null){
             root = currentNode.right;
+        }else{
+            root = null;
         }
 
 
@@ -144,7 +146,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
                 if(currentNode.elt.equals(x)){
                     return  true;
                 }
-                if(currentNode.elt.compareTo(x)>0){
+                if(currentNode.elt.compareTo(x)<0){
                     parent = currentNode;
                     currentNode = currentNode.left;
                     leftChild = true;
