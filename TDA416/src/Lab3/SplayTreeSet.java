@@ -47,13 +47,50 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean add(E x) {
-            return findNode(x,true);
+            return !findNode(x,true);
     }
 
     @Override
     public boolean remove(E x) {
-        return false;
+        boolean nodeExist = findNode(x,false);
+        if(!nodeExist){
+            return false;
+        }
+
+        if(currentNode.left == null){
+            replace(currentNode, currentNode.right);
+        }else if(currentNode.right == null){
+            replace(currentNode, currentNode.left);
+        }else{
+
+        }
+
+        return true;
     }
+
+    private void replace(Node<E> current, Node replacement ) {
+
+        if( current.parent == null){
+
+            root = replacement;
+
+        }else if( current == current.parent.left ) {
+
+            current.parent.left = replacement;
+
+        }else {
+
+            current.parent.right = replacement;
+
+        }
+
+        if( replacement != null ) {
+
+            replacement.parent = current.parent;
+
+        }
+    }
+
 
     @Override
     public boolean contains(E x) {
@@ -65,23 +102,22 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     private boolean findNode(E x, boolean insertNode){
 
-        if(x != null){
-            Node<E> current = root;
+            currentNode = root;
             Node<E> parent = null;
             boolean leftChild = false;
 
-            while (current != null){
+            while (currentNode != null){
 
-                if(current.elt.equals(x)){
+                if(currentNode.elt.equals(x)){
                     return  true;
                 }
-                if(current.elt.compareTo(x)>0){
-                    parent = current;
-                    current = current.left;
+                if(currentNode.elt.compareTo(x)>0){
+                    parent = currentNode;
+                    currentNode = currentNode.left;
                     leftChild = true;
                 }else{
-                    parent = current;
-                    current = current.right;
+                    parent = currentNode;
+                    currentNode = currentNode.right;
                     leftChild = false;
                 }
             }
@@ -102,13 +138,13 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
                 currentNode = parent;
             }
 
+            splay(currentNode);
 
-        }
 
         return false;
     }
     
-    private void splay(){
+    private void splay(Node node){
 
     }
 
