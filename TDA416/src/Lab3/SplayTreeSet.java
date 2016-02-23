@@ -5,7 +5,7 @@ package Lab3;
  */
 public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSet<E> {
 
-    public class Node<E>{
+    public class Node{
         /** The contents of the node is public */
         public E elt;
 
@@ -21,7 +21,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         }
 
-        public Node(E elt, Node<E> p) {
+        public Node(E elt, Node p) {
             this.elt = elt;
             parent = p;
             left = null;
@@ -38,9 +38,9 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }
     }
 
-    private Node<E> root = null;
+    protected Node root = null;
     private int size = 0;
-    private Node<E> currentNode = null;
+    protected Node currentNode = null;
 
 
     @Override
@@ -60,7 +60,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             return false;
         }
 
-        Node<E> tempNode = currentNode;
+        Node tempNode = currentNode;
         if(currentNode.left != null) {
             root = currentNode.left;
 
@@ -95,14 +95,9 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         return true;
     }
 
-    private Node<E> treeMinumum(Node<E> node){
-        while(node.left != null){
-            node = node.left;
-        }
-        return node;
-    }
 
-    private void replace(Node<E> current, Node replacement ) {
+
+    private void replace(Node current, Node replacement ) {
 
         if( current.parent == null){
 
@@ -138,7 +133,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
 
             currentNode = root;
-            Node<E> parent = null;
+            Node parent = null;
             boolean leftChild = false;
 
             while (currentNode != null){
@@ -148,17 +143,17 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
                 }
                 if(currentNode.elt.compareTo(x)<0){
                     parent = currentNode;
-                    currentNode = currentNode.left;
-                    leftChild = true;
-                }else{
-                    parent = currentNode;
                     currentNode = currentNode.right;
                     leftChild = false;
+                }else{
+                    parent = currentNode;
+                    currentNode = currentNode.left;
+                    leftChild = true;
                 }
             }
 
             if(insertNode){
-                Node<E> newNode = new Node<E>(x,parent);
+                Node newNode = new Node(x,parent);
                 if(parent == null) {
                     root = newNode;
                 }else if(leftChild){
