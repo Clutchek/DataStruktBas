@@ -55,8 +55,8 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
     public void rotateRight(Node node){
         Node left = node.left;
         if(left != null) {
-            node.left = right.right;
-            if (right.right != null) {
+            node.left = left.right;
+            if (left.right != null) {
                 left.right.parent = node;
             }
             left.parent = node.parent;
@@ -72,10 +72,9 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             left.right = node;
         }
         node.parent = left;
-
     }
 
-    public Node rotateLeft(Node node){
+    public void rotateLeft(Node node){
         Node right = node.right;
         if(right != null) {
             node.right = right.left;
