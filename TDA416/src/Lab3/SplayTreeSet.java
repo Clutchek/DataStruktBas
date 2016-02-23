@@ -61,11 +61,21 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }
 
         Node<E> tempNode = currentNode;
-        root = currentNode.left;
+        if(currentNode.left != null) {
+            root = currentNode.left;
 
-        findNode(currentNode.elt, false);
+            findNode(currentNode.elt, false);
 
-        root.right = tempNode.right;
+            if(root.right != null) {
+                root.right = tempNode.right;
+            }
+
+        }else if(currentNode.right != null){
+            root = currentNode.right;
+        }
+
+
+        size--;
 
 
         /*
@@ -124,6 +134,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     private boolean findNode(E x, boolean insertNode){
 
+
             currentNode = root;
             Node<E> parent = null;
             boolean leftChild = false;
@@ -156,11 +167,14 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
                 size++;
                 currentNode = newNode;
-            } else {
+            } else{
+
                 currentNode = parent;
             }
 
-            splay(currentNode);
+            if(currentNode != root) {
+                splay(currentNode);
+            }
 
 
         return false;
