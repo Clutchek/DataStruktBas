@@ -97,6 +97,30 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     }
 
-    
+    public void splay(Node node){
+        while(node.parent != null){
+            if(node.parent.parent == null) {
+                //zig step
+                if (node.parent.left == node) {
+                    rotateRight(node.parent);
+                } else { //node is right child
+                    rotateLeft(node.parent);
+                }
+            }else if(node.parent.left == node && node.parent.parent.left == node.parent){ //zig-zig ver 1.
+                rotateRight(node.parent.parent);
+                rotateRight(node.parent);
+            }else if(node.parent.right == node && node.parent.parent.right == node.parent){ //zig-zig ver 2.
+                rotateLeft(node.parent.parent);
+                rotateLeft(node.parent);
+            }else if(node.parent.left == node && node.parent.parent.right == node.parent){ //zig-zag ver 1.
+                rotateRight(node.parent);
+                rotateLeft(node.parent);
+            }else{ //zig-zag ver 2. (node right child and node.parent left child)
+                rotateLeft(node.parent);
+                rotateRight(node.parent);
+
+            }
+        }
+    }
 
 }
