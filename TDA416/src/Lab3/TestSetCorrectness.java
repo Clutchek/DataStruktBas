@@ -23,11 +23,15 @@ public class TestSetCorrectness {
     public static void testSimpleSet(SimpleSet<Integer> simpleSet, int numberOfIntegers, int numberOfOperations){
         Random randGenerator = new Random();
         TreeSet<Integer> referenceSet = new TreeSet<Integer>();
-        Float randomFloat = randGenerator.nextFloat(); //Number between 0 and 1.0
+
         List<String> listOfOperations = new ArrayList<String>();
         listOfOperations.add("Operations before error: ");
+
         for(int i = 0; i < numberOfOperations; i++) {
+
+            Float randomFloat = randGenerator.nextFloat();  //Number between 0 and 1.0
             int randInteger = randGenerator.nextInt(numberOfIntegers);
+
             if (randomFloat < 0.25) {
                 if(!(simpleSet.add(randInteger) == referenceSet.add(randInteger))){
                     printList(listOfOperations);
