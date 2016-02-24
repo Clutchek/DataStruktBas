@@ -50,11 +50,13 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean add(E x) {
-            return !findNode(x,true);
+        System.out.println("add: "+x.toString());
+        return !findNode(x,true);
     }
 
     @Override
     public boolean remove(E x) {
+        System.out.println("remove: "+x.toString());
         boolean nodeExist = findNode(x,false);
         if(!nodeExist){
             return false;
@@ -76,21 +78,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             root = null;
         }
 
-
         size--;
-
-
-        /*
-        if(currentNode.left == null){
-            replace(currentNode, currentNode.right);
-        }else if(currentNode.right == null){
-            replace(currentNode, currentNode.left);
-        }else{
-
-
-
-
-        }*/
 
         return true;
     }
@@ -123,7 +111,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean contains(E x) {
-
+        System.out.println("contains: "+x.toString());
         return findNode(x,false);
 
     }
@@ -138,14 +126,23 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
             while (currentNode != null){
 
+
                 if(currentNode.elt.equals(x)){
+                    splay(currentNode);
                     return  true;
                 }
+
                 if(currentNode.elt.compareTo(x)<0){
+                    System.out.println("Root: " + root.elt);
+                    System.out.println(currentNode.elt+" vs "+ x);
+                    System.out.println("took right");
                     parent = currentNode;
                     currentNode = currentNode.right;
                     leftChild = false;
                 }else{
+                    System.out.println("Root: " + root.elt);
+                    System.out.println(currentNode.elt+" vs "+ x);
+                    System.out.println("took left");
                     parent = currentNode;
                     currentNode = currentNode.left;
                     leftChild = true;
