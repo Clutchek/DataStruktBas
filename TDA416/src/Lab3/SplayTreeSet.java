@@ -46,17 +46,14 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean add(E x) {
-        System.out.println("add: "+x.toString());
         return !findNode(x,true);
     }
 
     @Override
     public boolean remove(E x) {
-        System.out.println("Started remove :" + x);
         //set desired value in root
         boolean valueExists = findNode(x, false);
         if(!valueExists){
-            System.out.println("Couldnt remove :"+x);
             return false;
         }
         Node originalRoot = root;
@@ -82,14 +79,12 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         originalRoot = null;
 
         size--;
-        System.out.println("Finished remove :"+x);
         return true;
     }
 
     
     @Override
     public boolean contains(E x) {
-        System.out.println("contains: "+x.toString());
         return findNode(x,false);
 
     }
