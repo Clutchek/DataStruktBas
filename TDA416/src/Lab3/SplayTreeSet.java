@@ -38,7 +38,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }
     }
 
-    private Node<E> root = null;
+    public Node<E> root = null;
     private int size = 0;
     private Node<E> currentNode = null;
 
@@ -79,19 +79,6 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         size--;
 
-
-        /*
-        if(currentNode.left == null){
-            replace(currentNode, currentNode.right);
-        }else if(currentNode.right == null){
-            replace(currentNode, currentNode.left);
-        }else{
-
-
-
-
-        }*/
-
         return true;
     }
 
@@ -102,30 +89,6 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         return node;
     }
 
-    private void replace(Node<E> current, Node replacement ) {
-
-        if( current.parent == null){
-
-            root = replacement;
-
-        }else if( current == current.parent.left ) {
-
-            current.parent.left = replacement;
-
-        }else {
-
-            current.parent.right = replacement;
-
-        }
-
-        if( replacement != null ) {
-
-            replacement.parent = current.parent;
-
-        }
-    }
-
-
     @Override
     public boolean contains(E x) {
 
@@ -135,12 +98,12 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
 
     private boolean findNode(E x, boolean insertNode){
-
-
             currentNode = root;
             Node<E> parent = null;
             boolean leftChild = false;
 
+
+            //no splay if find
             while (currentNode != null){
 
                 if(currentNode.elt.equals(x)){
@@ -215,6 +178,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             }
             right.parent = node.parent;
         }
+        //if satsen här är nog fel??
         if(node.parent == null){
             root = right;
         }else if(node == node.parent.right){

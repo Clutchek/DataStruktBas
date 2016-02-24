@@ -50,6 +50,17 @@ public class TestSetCorrectness {
                     }
                 }
             }
+            printTree(splayTree);
         }
+    }
+    private static void printTree(SplayTreeSet<Integer> tree){
+        SplayTreeSet<Integer>.Node<Integer> startNode = tree.root;
+        if(startNode != null){
+
+        }
+
+    }
+    private static void recPrint(SplayTreeSet<Integer>.Node<Integer> node){
+
     }
 }
