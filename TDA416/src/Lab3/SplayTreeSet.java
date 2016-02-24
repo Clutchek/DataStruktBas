@@ -1,8 +1,5 @@
 package Lab3;
 
-/**
- * Created by Rasmus on 2016-02-12.
- */
 public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSet<E> {
 
     public class Node{
@@ -40,7 +37,6 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     protected Node root = null;
     private int size = 0;
-    protected Node currentNode = null;
 
 
     @Override
@@ -56,30 +52,37 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean remove(E x) {
-        System.out.println("remove: "+x.toString());
-        boolean nodeExist = findNode(x,false);
-        if(!nodeExist){
+        System.out.println("Started remove :" + x);
+        //set desired value in root
+        boolean valueExists = findNode(x, false);
+        if(!valueExists){
+            System.out.println("Couldnt remove :"+x);
             return false;
         }
+        Node originalRoot = root;
+        if(originalRoot.left != null){
+            //set left side of tree as root
+            root = originalRoot.left;
+            root.parent = null;
 
-        Node tempNode = currentNode;
-        if(currentNode.left != null) {
-            root = currentNode.left;
+            //set highest value in left tree as root, should have no right child as it is the highest value on left side
+            findNode(originalRoot.elt, false);
 
-            findNode(currentNode.elt, false);
-
-            if(root.right != null) {
-                root.right = tempNode.right;
+            if(originalRoot.right != null){
+                root.right = originalRoot.right;
+                root.right.parent = root;
             }
 
-        }else if(currentNode.right != null){
-            root = currentNode.right;
+        }else if(originalRoot.right != null){
+            root = originalRoot.right;
+            root.parent = null;
         }else{
             root = null;
         }
+        originalRoot = null;
 
         size--;
-
+        System.out.println("Finished remove :"+x);
         return true;
     }
 
@@ -93,37 +96,26 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
 
     private boolean findNode(E x, boolean insertNode){
-            currentNode = root;
+            Node currentNode = root;
             Node parent = null;
             boolean leftChild = false;
 
-
             //no splay if find
             while (currentNode != null){
-
-
                 if(currentNode.elt.equals(x)){
                     splay(currentNode);
                     return  true;
                 }
-
                 if(currentNode.elt.compareTo(x)<0){
-                    System.out.println("Root: " + root.elt);
-                    System.out.println(currentNode.elt+" vs "+ x);
-                    System.out.println("took right");
                     parent = currentNode;
                     currentNode = currentNode.right;
                     leftChild = false;
                 }else{
-                    System.out.println("Root: " + root.elt);
-                    System.out.println(currentNode.elt+" vs "+ x);
-                    System.out.println("took left");
                     parent = currentNode;
                     currentNode = currentNode.left;
                     leftChild = true;
                 }
             }
-
             if(insertNode){
                 Node newNode = new Node(x,parent);
                 if(parent == null) {
@@ -133,11 +125,9 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
                 }else{
                     parent.right = newNode;
                 }
-
                 size++;
                 currentNode = newNode;
             } else{
-
                 currentNode = parent;
             }
 
@@ -153,13 +143,13 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     public void rotateRight(Node node){
         Node left = node.left;
-        if(left != null) {
-            node.left = left.right;
-            if (left.right != null) {
-                left.right.parent = node;
-            }
-            left.parent = node.parent;
+        if(left == null) throw new IllegalArgumentException();
+        node.left = left.right;
+        if (left.right != null) {
+            left.right.parent = node;
         }
+        left.parent = node.parent;
+
         if(node.parent == null){
             root = left;
         }else if(node == node.parent.right){
@@ -167,22 +157,19 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }else{
             node.parent.left = left;
         }
-        if(left != null){
-            left.right = node;
-        }
+        left.right = node;
         node.parent = left;
     }
 
     public void rotateLeft(Node node){
         Node right = node.right;
-        if(right != null) {
-            node.right = right.left;
-            if (right.left != null) {
-                right.left.parent = node;
-            }
-            right.parent = node.parent;
+        if(right == null) throw new IllegalArgumentException();
+        node.right = right.left;
+        if (right.left != null) {
+            right.left.parent = node;
         }
-        //if satsen här är nog fel??
+        right.parent = node.parent;
+
         if(node.parent == null){
             root = right;
         }else if(node == node.parent.right){
@@ -190,9 +177,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }else{
             node.parent.left = right;
         }
-        if(right != null){
-            right.left = node;
-        }
+        right.left = node;
         node.parent = right;
 
     }
@@ -222,5 +207,4 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             }
         }
     }
-
 }

@@ -31,12 +31,14 @@ public class TestSetCorrectness {
                         System.out.println("Error on add");
                         System.exit(1);
                     }
+
                 }else if(random < 0.5){
                     int randInt = randomGen.nextInt(n4);
                     if(!(splayTree.remove(randInt) == treeSet.remove(randInt))){
                         System.out.println("Error on remove");
                         System.exit(2);
                     }
+
                 }else if(random < 0.75){
                     int randInt = randomGen.nextInt(n4);
                     if(!(splayTree.contains(randInt) == treeSet.contains(randInt))){
@@ -50,17 +52,6 @@ public class TestSetCorrectness {
                     }
                 }
             }
-            printTree(splayTree);
         }
-    }
-    private static void printTree(SplayTreeSet<Integer> tree){
-        SplayTreeSet<Integer>.Node<Integer> startNode = tree.root;
-        if(startNode != null){
-
-        }
-
-    }
-    private static void recPrint(SplayTreeSet<Integer>.Node<Integer> node){
-
     }
 }
