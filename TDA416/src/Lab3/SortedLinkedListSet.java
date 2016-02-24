@@ -48,11 +48,12 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
     @Override
     public boolean add(E x) {
 
-        if(contains(x)){
+
+        if(contains(x)){// if value already exist it should not be added
             return false;
         }
 
-        if(first == null){
+        if(first == null){// if list is empty create the first node
             Node newNode = new Node(x);
             first = newNode;
             last = newNode;
@@ -64,7 +65,8 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
         boolean compareOK= true;
 
-        while ((node.next != null) && compareOK){ //kan vara compareOk fel iteration
+        //run through list until either larger value is found or end of list is reached
+        while ((node.next != null) && compareOK){
             if(node.elt.compareTo(x) >= 0){
                 compareOK = false;
             }else{
@@ -72,7 +74,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
             }
         }
         Node newNode = new Node(x);
-        if(compareOK){ //compareOK
+        if(compareOK){
             if(node.elt.compareTo(x) >= 0){
                 newNode.next = node;
                 newNode.prev = node.prev;
@@ -86,7 +88,6 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
             }else {
                 node.next = newNode;
                 newNode.prev = node;
-                //newNode.next = null
                 last = newNode;
             }
         }else{
@@ -103,15 +104,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 
         size++;
 
-        if(first != null){
-            Node noder = first;
-            while(noder != null){
-                System.out.print("" + noder.elt + " ");
-                noder = noder.next;
-            }
-            System.out.print("\n");
 
-        }
         return true;
 
     }
@@ -123,7 +116,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         }
 
         Node node = first;
-
+        //running through list until node is found and remove the node if not found return false
         while(node != null){
             if(node.elt.equals(x)){
                 if(node == last){
@@ -152,6 +145,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
     @Override
     public boolean contains(E x) {
         Node node = first;
+        // loop from first node until the value is found or end of list
         while(node != null){
             if(node.elt.equals(x)){
                 return true;
