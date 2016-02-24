@@ -5,7 +5,7 @@ package Lab3;
  */
 public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSet<E> {
 
-    public class Node<E>{
+    public class Node{
         /** The contents of the node is public */
         public E elt;
 
@@ -21,7 +21,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         }
 
-        public Node(E elt, Node<E> p) {
+        public Node(E elt, Node p) {
             this.elt = elt;
             parent = p;
             left = null;
@@ -38,9 +38,9 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }
     }
 
-    public Node<E> root = null;
+    protected Node root = null;
     private int size = 0;
-    private Node<E> currentNode = null;
+    protected Node currentNode = null;
 
 
     @Override
@@ -50,17 +50,19 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean add(E x) {
-            return !findNode(x,true);
+        System.out.println("add: "+x.toString());
+        return !findNode(x,true);
     }
 
     @Override
     public boolean remove(E x) {
+        System.out.println("remove: "+x.toString());
         boolean nodeExist = findNode(x,false);
         if(!nodeExist){
             return false;
         }
 
-        Node<E> tempNode = currentNode;
+        Node tempNode = currentNode;
         if(currentNode.left != null) {
             root = currentNode.left;
 
@@ -76,22 +78,15 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             root = null;
         }
 
-
         size--;
 
         return true;
     }
 
-    private Node<E> treeMinumum(Node<E> node){
-        while(node.left != null){
-            node = node.left;
-        }
-        return node;
-    }
-
+    
     @Override
     public boolean contains(E x) {
-
+        System.out.println("contains: "+x.toString());
         return findNode(x,false);
 
     }
@@ -99,29 +94,38 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     private boolean findNode(E x, boolean insertNode){
             currentNode = root;
-            Node<E> parent = null;
+            Node parent = null;
             boolean leftChild = false;
 
 
             //no splay if find
             while (currentNode != null){
 
+
                 if(currentNode.elt.equals(x)){
+                    splay(currentNode);
                     return  true;
                 }
+
                 if(currentNode.elt.compareTo(x)<0){
-                    parent = currentNode;
-                    currentNode = currentNode.left;
-                    leftChild = true;
-                }else{
+                    System.out.println("Root: " + root.elt);
+                    System.out.println(currentNode.elt+" vs "+ x);
+                    System.out.println("took right");
                     parent = currentNode;
                     currentNode = currentNode.right;
                     leftChild = false;
+                }else{
+                    System.out.println("Root: " + root.elt);
+                    System.out.println(currentNode.elt+" vs "+ x);
+                    System.out.println("took left");
+                    parent = currentNode;
+                    currentNode = currentNode.left;
+                    leftChild = true;
                 }
             }
 
             if(insertNode){
-                Node<E> newNode = new Node<E>(x,parent);
+                Node newNode = new Node(x,parent);
                 if(parent == null) {
                     root = newNode;
                 }else if(leftChild){
