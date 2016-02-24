@@ -46,6 +46,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     @Override
     public boolean add(E x) {
+        //if value already exist findNode will return true and not inserted
         return !findNode(x,true);
     }
 
@@ -71,6 +72,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
             }
 
         }else if(originalRoot.right != null){
+            //set right side of tree as root
             root = originalRoot.right;
             root.parent = null;
         }else{
@@ -91,29 +93,32 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
 
     private boolean findNode(E x, boolean insertNode){
+
             Node currentNode = root;
             Node parent = null;
             boolean leftChild = false;
 
-            //no splay if find
-            while (currentNode != null){
-                if(currentNode.elt.equals(x)){
+
+            while (currentNode != null){//Search through the tree until find existing node or hitting the an end node
+
+                if(currentNode.elt.equals(x)){//if matching node is found splay the node
                     splay(currentNode);
                     return  true;
                 }
-                if(currentNode.elt.compareTo(x)<0){
+                if(currentNode.elt.compareTo(x)<0){//if target value is larger than current node go to right child
                     parent = currentNode;
                     currentNode = currentNode.right;
                     leftChild = false;
-                }else{
+                }else{//else go to left child
                     parent = currentNode;
                     currentNode = currentNode.left;
                     leftChild = true;
                 }
             }
+            //if parameter insertNode is true a new node with value x will be inserted
             if(insertNode){
                 Node newNode = new Node(x,parent);
-                if(parent == null) {
+                if(parent == null) {//if the tree is empty insert at root
                     root = newNode;
                 }else if(leftChild){
                     parent.left = newNode;
