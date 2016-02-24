@@ -73,6 +73,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
         }else if(originalRoot.right != null){
             //set right side of tree as root
+            //left side should be null, so it is ok to make the right child our new root and remove the old one.
             root = originalRoot.right;
             root.parent = null;
         }else{
@@ -91,7 +92,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     }
 
-
+    //insertNode indicates if you want to insert the value instead of just searching for it.
     private boolean findNode(E x, boolean insertNode){
 
             Node currentNode = root;
@@ -143,13 +144,16 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
 
     public void rotateRight(Node node){
         Node left = node.left;
-        if(left == null) throw new IllegalArgumentException();
+        if(left == null) throw new IllegalArgumentException("Left child was null, cannot rotate");
+
+        //rotating the left child into nodes position
         node.left = left.right;
         if (left.right != null) {
             left.right.parent = node;
         }
         left.parent = node.parent;
 
+        //Fixing the relationship to the new parent, checks if parent was null or left/right child
         if(node.parent == null){
             root = left;
         }else if(node == node.parent.right){
@@ -157,19 +161,23 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }else{
             node.parent.left = left;
         }
+        //adding node properly back to the tree
         left.right = node;
         node.parent = left;
     }
 
     public void rotateLeft(Node node){
         Node right = node.right;
-        if(right == null) throw new IllegalArgumentException();
+        if(right == null) throw new IllegalArgumentException("Right child was null, cannot rotate");
+
+        //rotating the right child into nodes position
         node.right = right.left;
         if (right.left != null) {
             right.left.parent = node;
         }
         right.parent = node.parent;
 
+        //Fixing the relationship to the new parent, checks if parent was null or left/right child
         if(node.parent == null){
             root = right;
         }else if(node == node.parent.right){
@@ -177,6 +185,7 @@ public class SplayTreeSet <E extends Comparable<? super E>>  implements SimpleSe
         }else{
             node.parent.left = right;
         }
+        //adding node properly back to the tree
         right.left = node;
         node.parent = right;
 

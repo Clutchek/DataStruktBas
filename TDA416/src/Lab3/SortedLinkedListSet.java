@@ -66,6 +66,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
         boolean compareOK= true;
 
         //run through list until either larger value is found or end of list is reached
+        //compareOK is true until we find a value that is larger than ours
         while ((node.next != null) && compareOK){
             if(node.elt.compareTo(x) >= 0){
                 compareOK = false;
@@ -74,6 +75,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
             }
         }
         Node newNode = new Node(x);
+        //If compareOk is true, it means we went through the entire list. The node should therefore be added at the end.
         if(compareOK){
             if(node.elt.compareTo(x) >= 0){
                 newNode.next = node;
@@ -91,6 +93,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
                 last = newNode;
             }
         }else{
+            //We found a larger value, we will insert ourselves before the larger value.
             newNode.next = node;
             newNode.prev = node.prev;
             if(node.prev != null){
