@@ -78,7 +78,7 @@ CREATE VIEW PathToGraduation AS
     LEFT JOIN RecommendedPassedCourses on RecommendedPassedCourses.student = TempTable.student;
 
 
-
+CREATE VIEW CourseQueuePositions AS
     SELECT student, restrictedCourse, timestamp, row_number() over (order by timestamp) AS queuenumber
     FROM appliedFor;
 
