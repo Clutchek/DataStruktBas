@@ -56,11 +56,6 @@ INSERT INTO course values ('tda416','DataStructures',15, 'dep1');
 INSERT INTO course values ('tmv206','Linear Math',15, 'dep1');
 INSERT INTO course values ('try123', 'theoretical data', 15, 'dep1');
 
-INSERT INTO courseClassification values ('tmv206','Math');
-INSERT INTO courseClassification values ('try123','Research');
-INSERT INTO courseClassification values ('tda357','Seminar');
-
-
 --dep2 courses
 INSERT INTO course values ('mve045','Envar',15, 'dep2');
 INSERT INTO course values ('mve055','Matstat',15, 'dep2');

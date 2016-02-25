@@ -40,8 +40,9 @@ CREATE TABLE classification(
 	name VARCHAR primary key);
 
 CREATE TABLE courseClassification(
-	course VARCHAR primary key references course(courseCode),
-	classification VARCHAR references classification(name));
+	course VARCHAR references course(courseCode),
+	classification VARCHAR references classification(name),
+	PRIMARY KEY (course, classification));
 
 CREATE TABLE restrictedCourse(
 	course VARCHAR primary key references course(courseCode),
