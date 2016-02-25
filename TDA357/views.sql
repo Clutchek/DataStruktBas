@@ -46,32 +46,32 @@ CREATE VIEW PassedClass AS
   	SELECT * from (passedcourses JOIN courseClassification on passedcourses.coursecode = courseclassification.course);
 
 
-CREATE VIEW StudentTotalCredits AS
+CREATE VIEW PathToGraduation AS
+	WITH StudentTotalCredits AS(
  	SELECT student.personalcodenumber as student, coalesce(sum(passedcourses.credits),0) AS Totalcredits
 	FROM student
 	LEFT JOIN passedcourses ON student.personalcodenumber = passedcourses.student
 	GROUP BY student.personalcodenumber
-	ORDER BY student.personalcodenumber, Totalcredits;
+	ORDER BY student.personalcodenumber, Totalcredits),
 
-CREATE VIEW SudentUnreadCourses AS
-  SELECT student.personalcodenumber as student, Count(UnreadMandatory.course) as nbrOfUnreadCourses
-   FROM student
-   LEFT JOIN UnreadMandatory ON student.personalcodenumber = UnreadMandatory.student
-  GROUP BY student.personalcodenumber
-  ORDER BY student.personalcodenumber;
+  SudentUnreadCourses AS(
+    SELECT student.personalcodenumber as student, Count(UnreadMandatory.course) as nbrOfUnreadCourses
+    FROM student
+    LEFT JOIN UnreadMandatory ON student.personalcodenumber = UnreadMandatory.student
+    GROUP BY student.personalcodenumber
+    ORDER BY student.personalcodenumber),
 
-  CREATE VIEW StudentClassificationCredits AS
+  StudentClassificationCredits AS (
 	SELECT student.personalcodenumber as student,
  	sum( CASE WHEN classification = 'Math' THEN PassedClass.credits ELSE 0 END) as mathCredits,
  	sum( CASE WHEN classification = 'Research' THEN PassedClass.credits ELSE 0 END) as researchCredits,
  	sum( CASE WHEN classification = 'Seminar' THEN 1 ELSE 0 END) as nbrOfSeminarCourses
    	FROM student LEFT JOIN PassedClass ON student.personalcodenumber = PassedClass.student
   	GROUP BY student.personalcodenumber
-  	ORDER BY student.personalcodenumber;
+  	ORDER BY student.personalcodenumber)
 
 
 
-CREATE VIEW PathToGraduation AS
 	SELECT TempTable.student, totalcredits, nbrOfUnreadCourses, mathCredits, researchCredits, nbrofseminarcourses, CASE WHEN nbrOfUnreadCourses < 1 AND mathCredits >= 20 AND researchCredits >= 10 AND nbrOfSeminarCourses >= 1 THEN 'YES' ELSE 'NO' END AS qualifiedForGraduation
     FROM 
     ((StudentTotalCredits natural Join  
