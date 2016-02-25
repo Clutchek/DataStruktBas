@@ -34,25 +34,23 @@ CREATE VIEW UnreadMandatory AS
 	) AS Temp
 	WHERE (student, course)  NOT IN (SELECT student, coursecode from PassedCourses);
 
-CREATE VIEW RecommendedPassedCourses AS
+CREATE VIEW PathToGraduation AS
+	WITH RecommendedPassedCourses AS(
 	SELECT student, credits AS RecCredits
   	FROM( SELECT distinct on (student,coursecode)*
   	FROM 
   	(PassedCourses JOIN branchRecommendedCourse
-    ON PassedCourses.courseCode = branchRecommendedCourse.course )AS REC)AS SEL;
+    ON PassedCourses.courseCode = branchRecommendedCourse.course )AS REC)AS SEL),
 
+  PassedClass AS(
+  	SELECT * from (passedcourses JOIN courseClassification on passedcourses.coursecode = courseclassification.course)),  
 
-CREATE VIEW PassedClass AS
-  	SELECT * from (passedcourses JOIN courseClassification on passedcourses.coursecode = courseclassification.course);
-
-
-CREATE VIEW PathToGraduation AS
-	WITH StudentTotalCredits AS(
- 	SELECT student.personalcodenumber as student, coalesce(sum(passedcourses.credits),0) AS Totalcredits
-	FROM student
-	LEFT JOIN passedcourses ON student.personalcodenumber = passedcourses.student
-	GROUP BY student.personalcodenumber
-	ORDER BY student.personalcodenumber, Totalcredits),
+  StudentTotalCredits AS(
+ 	 SELECT student.personalcodenumber as student, coalesce(sum(passedcourses.credits),0) AS Totalcredits
+	 FROM student
+	 LEFT JOIN passedcourses ON student.personalcodenumber = passedcourses.student
+	 GROUP BY student.personalcodenumber
+	 ORDER BY student.personalcodenumber, Totalcredits),
 
   SudentUnreadCourses AS(
     SELECT student.personalcodenumber as student, Count(UnreadMandatory.course) as nbrOfUnreadCourses
