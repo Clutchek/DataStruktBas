@@ -51,8 +51,8 @@ CREATE TABLE restrictedCourse(
 
 CREATE TABLE prerequisites(
 	course VARCHAR NOT NULL references course(courseCode),
-	requredCourse VARCHAR NOT NULL references course(courseCode),
-	PRIMARY KEY (course, requredCourse));
+	requiredCourse VARCHAR NOT NULL references course(courseCode),
+	PRIMARY KEY (course, requiredCourse));
 
 CREATE TABLE appliedFor(
 	student VARCHAR NOT NULL references student(personalCodeNumber),
