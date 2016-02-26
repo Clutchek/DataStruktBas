@@ -80,7 +80,7 @@ CREATE VIEW PathToGraduation AS
 
 CREATE VIEW CourseQueuePositions AS
     
-        SELECT AF.student, AF.restrictedCourse, AF.timestamp, COUNT(AF.timestamp) OVER (ORDER BY AF.restrictedCourse,) 
+        SELECT AF.student, AF.restrictedCourse, AF.timestamp, ROW_NUMBER() OVER(PARTITION BY AF.restrictedCourse ORDER BY AF.timestamp)
     FROM appliedFor AS AF GROUP BY AF.restrictedCourse, AF.student;
 
 
