@@ -40,7 +40,7 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
         IF nbrOfRegisterend >= maxNbrOfStudents THEN
             INSERT values(NEW.student, NEW.course, default) INTO appliedFor;
         ELSE
-            INSERT values(NEW.student, NEW.course);
+            INSERT values(NEW.student, NEW.course) INTO isAttending;
         END IF;
 
 
@@ -48,17 +48,47 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER regCheck BEFORE INSERT OR UPDATE ON Registrations
+CREATE TRIGGER regCheck BEFORE INSERT Registrations
     FOR EACH ROW EXECUTE PROCEDURE regCheck();
 
 
 
 
-CREATE FUNCTION unregCheck() RETURNS trigger AS $unregCheck$
+CREATE FUNCTION unregCheck() RETURNS trigger AS $$
     BEGIN
-       
+
+    --Kanske kolla efter nullvärden?
+
+    IF EXISTS(SELECT student FROM appliedFor WHERE student = OLD.student AND course = OLD.course)
+    THEN DELETE FROM appliedFor WHERE student = OLD.student AND course = OLD.course
+    END IF;
+
+    IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
+    THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course
+        nbrOfRegisterend := (SELECT Count(student)
+                            FROM Registrations
+                            WHERE course = OLD.course);
+
+        maxNbrOfStudents := (SELECT nbrOfStudents 
+                            FROM restrictedCourse
+                            WHERE course = OLD.course);
+
+        IF (nbrOfRegisterend < maxNbrOfStudents)
+            firstStudent := SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number)
+
+            IF firstStudent IS NOT NULL
+            INSERT values(firstStudent, OLD.course) INTO isAttending;
+            END IF
+        END IF
+
+    ELSE
+        RAISE EXCEPTION '% is not attending %', OLD.student, OLD.course
+    END IF;
+
+    RETURN OLD;
+
     END;
-$unregCheck$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER unregCheck BEFORE DELETE ON Registrations
     FOR EACH ROW EXECUTE PROCEDURE unreg();
