@@ -76,19 +76,22 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
 
     IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
     THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course;
-        nbrOfRegisterend := (SELECT Count(student)
-                            FROM Registrations
-                            WHERE course = OLD.course);
+        --limited course
+        IF EXISTS(SELECT course FROM requiredCourse WHERE course = OLD.course) THEN
+            nbrOfRegisterend := (SELECT Count(student)
+                                FROM Registrations
+                                WHERE course = OLD.course);
 
-        maxNbrOfStudents := (SELECT nbrOfStudents 
-                            FROM restrictedCourse
-                            WHERE course = OLD.course);
+            maxNbrOfStudents := (SELECT nbrOfStudents 
+                                FROM restrictedCourse
+                                WHERE course = OLD.course);
 
-        IF (nbrOfRegisterend < maxNbrOfStudents) THEN
-            firstStudent := (SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number));
+            IF (nbrOfRegisterend < maxNbrOfStudents) THEN
+                firstStudent := (SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number));
 
-            IF firstStudent IS NOT NULL THEN
-            INSERT INTO isAttending values(firstStudent, OLD.course);
+                IF firstStudent IS NOT NULL THEN
+                INSERT INTO isAttending values(firstStudent, OLD.course);
+                END IF;
             END IF;
         END IF;
 
