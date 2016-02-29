@@ -1,3 +1,4 @@
+
 CREATE FUNCTION regCheck() RETURNS trigger AS $$
     BEGIN
 
@@ -49,3 +50,15 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER regCheck BEFORE INSERT OR UPDATE ON Registrations
     FOR EACH ROW EXECUTE PROCEDURE regCheck();
+
+
+
+
+CREATE FUNCTION unregCheck() RETURNS trigger AS $unregCheck$
+    BEGIN
+       
+    END;
+$unregCheck$ LANGUAGE plpgsql;
+
+CREATE TRIGGER unregCheck BEFORE DELETE ON Registrations
+    FOR EACH ROW EXECUTE PROCEDURE unreg();
