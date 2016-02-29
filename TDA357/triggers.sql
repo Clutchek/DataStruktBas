@@ -1,16 +1,24 @@
 
 CREATE FUNCTION regCheck() RETURNS trigger AS $$
+    DECLARE nbrOfRegisterend INT;
+    DECLARE nbrOfRequiredCourses INT;
+    DECLARE nbrOfPassedCourses INT;
+    DECLARE maxNbrOfStudents INT;
+
     BEGIN
 
         --null, kurskod existerar
         IF NEW.student IS NULL OR NEW.course IS NULL THEN
-            RAISE EXCEPTION 'Input was null'
+            RAISE EXCEPTION 'Input was null';
+        END IF;
 
         IF NOT EXISTS(SELECT course FROM course WHERE course.coursecode = NEW.course) THEN
-            RAISE EXCEPTION 'Chosen course does not exist'
+            RAISE EXCEPTION 'Chosen course does not exist';
+        END IF;
 
         IF NOT EXISTS(SELECT personalCodeNumber FROM student WHERE student.personalCodeNumber = NEW.student) THEN
-            RAISE EXCEPTION 'Student does not exist'
+            RAISE EXCEPTION 'Student does not exist';
+        END IF;
 
         IF EXISTS(SELECT student FROM isAttending WHERE isAttending.student = New.student AND isAttending.course = NEW.course)
         OR EXISTS(SELECT student FROM PassedCourses WHERE PassedCourses.student = New.student AND PassedCourses.coursecode = NEW.course)
@@ -21,7 +29,7 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
         nbrOfRequiredCourses := (SELECT COUNT(course) FROM prerequisites WHERE course = NEW.course);
 
         nbrOfPassedCourses := (SELECT COUNT(student) FROM prerequisites JOIN PassedCourses on requiredCourse = coursecode WHERE 
-            AND  student = NEW.student 
+            student = NEW.student 
             AND course = NEW.course);
 
         IF (nbrOfRequiredCourses > nbrOfPassedCourses)
@@ -38,9 +46,9 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
                             WHERE course = NEW.course);
 
         IF nbrOfRegisterend >= maxNbrOfStudents THEN
-            INSERT values(NEW.student, NEW.course, default) INTO appliedFor;
+            INSERT INTO appliedFor values(NEW.student, NEW.course, default);
         ELSE
-            INSERT values(NEW.student, NEW.course) INTO isAttending;
+            INSERT INTO isAttending values(NEW.student, NEW.course) ;
         END IF;
 
 
@@ -48,23 +56,26 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER regCheck BEFORE INSERT Registrations
+CREATE TRIGGER regCheck INSTEAD OF INSERT ON Registrations
     FOR EACH ROW EXECUTE PROCEDURE regCheck();
 
 
 
 
 CREATE FUNCTION unregCheck() RETURNS trigger AS $$
+    DECLARE nbrOfRegisterend INT;
+    DECLARE maxNbrOfStudents INT;
+    DECLARE firstStudent VARCHAR;
     BEGIN
 
     --Kanske kolla efter nullvärden?
 
     IF EXISTS(SELECT student FROM appliedFor WHERE student = OLD.student AND course = OLD.course)
-    THEN DELETE FROM appliedFor WHERE student = OLD.student AND course = OLD.course
+    THEN DELETE FROM appliedFor WHERE student = OLD.student AND course = OLD.course;
     END IF;
 
     IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
-    THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course
+    THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course;
         nbrOfRegisterend := (SELECT Count(student)
                             FROM Registrations
                             WHERE course = OLD.course);
@@ -73,16 +84,14 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
                             FROM restrictedCourse
                             WHERE course = OLD.course);
 
-        IF (nbrOfRegisterend < maxNbrOfStudents)
-            firstStudent := SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number)
+        IF (nbrOfRegisterend < maxNbrOfStudents) THEN
+            firstStudent := (SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number));
 
-            IF firstStudent IS NOT NULL
-            INSERT values(firstStudent, OLD.course) INTO isAttending;
-            END IF
-        END IF
+            IF firstStudent IS NOT NULL THEN
+            INSERT INTO isAttending values(firstStudent, OLD.course);
+            END IF;
+        END IF;
 
-    ELSE
-        RAISE EXCEPTION '% is not attending %', OLD.student, OLD.course
     END IF;
 
     RETURN OLD;
@@ -90,5 +99,5 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER unregCheck BEFORE DELETE ON Registrations
-    FOR EACH ROW EXECUTE PROCEDURE unreg();
+CREATE TRIGGER unregCheck INSTEAD OF DELETE ON Registrations
+    FOR EACH ROW EXECUTE PROCEDURE unregCheck();
