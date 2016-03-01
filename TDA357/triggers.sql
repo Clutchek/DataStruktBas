@@ -91,6 +91,7 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
                                 WHERE course = OLD.course);
 
             IF (nbrOfRegistered < maxNbrOfStudents) THEN
+                --We can check with row_number=1 since our table  coursequeuepositions has different counters for different courses
                 firstStudent := (SELECT student FROM coursequeuepositions WHERE restrictedCourse = OLD.course AND row_number = 1);
 
                 IF firstStudent IS NOT NULL THEN
