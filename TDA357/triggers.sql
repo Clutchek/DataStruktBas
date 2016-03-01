@@ -76,7 +76,7 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
     --Kanske kolla efter nullvärden?
 
     IF EXISTS(SELECT student FROM appliedFor WHERE student = OLD.student AND restrictedCourse = OLD.course)
-    THEN DELETE FROM appliedFor WHERE student = OLD.student AND course = OLD.course;
+    THEN DELETE FROM appliedFor WHERE student = OLD.student AND restrictedCourse = OLD.course;
     END IF;
 
     IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
