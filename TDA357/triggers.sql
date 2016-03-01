@@ -39,11 +39,11 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
 
         IF (nbrOfRequiredCourses > nbrOfPassedCourses)
         THEN
-            RAISE EXCEPTION '% have not passed all required courses', NEW.student;
+            RAISE EXCEPTION '% have not passed all prerequisites', NEW.student;
         END IF;
 
         nbrOfRegisterend := (SELECT Count(student)
-                            FROM Registrations
+                            FROM isAttending
                             WHERE course = NEW.course);
 
         maxNbrOfStudents := (SELECT nbrOfStudents 
@@ -53,7 +53,7 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
         IF nbrOfRegisterend >= maxNbrOfStudents THEN
             INSERT INTO appliedFor values(NEW.student, NEW.course, default);
         ELSE
-            INSERT INTO isAttending values(NEW.student, NEW.course) ;
+            INSERT INTO isAttending values(NEW.student, NEW.course);
         END IF;
 
 
@@ -101,6 +101,8 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
         END IF;
 
     END IF;
+
+    --kanske borde kolla om deletion gjorts
 
     RETURN OLD;
 

@@ -154,6 +154,9 @@ INSERT INTO course values ('tda416','DataStructures',15, 'dep1');
 INSERT INTO course values ('tmv206','Linear Math',15, 'dep1');
 INSERT INTO course values ('try123', 'theoretical data', 15, 'dep1');
 
+INSERT INTO course values ('insert1','insertCourse',15,'dep1');
+INSERT INTO course values ('insert2','restrictedInsertCourse',15,'dep1');
+
 --dep2 courses
 INSERT INTO course values ('mve045','Envar',15, 'dep2');
 INSERT INTO course values ('mve055','Matstat',15, 'dep2');
@@ -176,10 +179,14 @@ INSERT INTO courseClassification values ('try123','Research');
 INSERT INTO restrictedCourse values ('try234',15);
 INSERT INTO restrictedCourse values ('try123',10);
 
+INSERT INTO restrictedCourse values ('insert2', 1);
+
 
 --Prerequisites
 INSERT INTO prerequisites values ('try123','tda357');
 INSERT INTO prerequisites values ('try234','mve045');
+
+INSERT INTO prerequisites values('insert1','tmv206');
 
 --graded
 
@@ -202,12 +209,19 @@ INSERT INTO graded values ('941202-1337','tda357', '5');
 INSERT INTO graded values ('941202-1337','try234', '5');
 INSERT INTO graded values ('941202-1337','mve055', '5');
 
-
+INSERT INTO graded values ('941206-1337','insert1', '3');
+INSERT INTO graded values ('941209-1337','tmv206', '4');
 
 --isAttending
 INSERT INTO isAttending values ('941202-1337','mve055');
 INSERT INTO isAttending values ('941203-1337','mve055');
 INSERT INTO isAttending values ('941204-1337','mve055');
+
+INSERT INTO isAttending values ('941205-1337','insert1');
+
+
+--appliedFor
+INSERT INTO appliedFor values('941207-1337','try123', default);
 
 --programMandatoryCourse
 
