@@ -154,11 +154,13 @@ INSERT INTO course values ('tda416','DataStructures',15, 'dep1');
 INSERT INTO course values ('tmv206','Linear Math',15, 'dep1');
 INSERT INTO course values ('try123', 'theoretical data', 15, 'dep1');
 
+
 --dep2 courses
 INSERT INTO course values ('mve045','Envar',15, 'dep2');
 INSERT INTO course values ('mve055','Matstat',15, 'dep2');
 INSERT INTO course values ('tmv200','Discrete Math',15, 'dep2');
 INSERT INTO course values ('try234', 'theoretical math', 15, 'dep2');
+INSERT INTO course values ('MMA321', 'mixed martial arts', 15, 'dep2');
 
 
 --courseClassificaiton
@@ -172,9 +174,12 @@ INSERT INTO courseClassification values ('try234','Research');
 INSERT INTO courseClassification values ('try123','Research');
 
 
+
+
 --restrictedCourse
 INSERT INTO restrictedCourse values ('try234',15);
 INSERT INTO restrictedCourse values ('try123',10);
+INSERT INTO restrictedCourse values ('MMA321', 1);
 
 
 --Prerequisites
