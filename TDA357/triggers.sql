@@ -16,7 +16,7 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
             RAISE EXCEPTION 'Course in input was null';
         END IF;
 
-        IF NOT EXISTS(SELECT course FROM course WHERE course.coursecode = NEW.course) THEN
+        IF NOT EXISTS(SELECT coursecode FROM course WHERE course.coursecode = NEW.course) THEN
             RAISE EXCEPTION 'Chosen course does not exist';
         END IF;
 
@@ -26,7 +26,7 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
 
         IF EXISTS(SELECT student FROM isAttending WHERE isAttending.student = New.student AND isAttending.course = NEW.course)
         OR EXISTS(SELECT student FROM PassedCourses WHERE PassedCourses.student = New.student AND PassedCourses.coursecode = NEW.course)
-        OR EXISTS(SELECT student FROM PassedCourses WHERE appliedFor.student = New.student AND appliedFor.restrictedCourse = NEW.course)
+        OR EXISTS(SELECT student FROM appliedFor WHERE appliedFor.student = New.student AND appliedFor.restrictedCourse = NEW.course)
         THEN
             RAISE EXCEPTION '% have already applied for this course, is attending the course or have passed this course', NEW.student;
         END IF;
@@ -68,7 +68,7 @@ CREATE TRIGGER regCheck INSTEAD OF INSERT ON Registrations
 
 
 CREATE FUNCTION unregCheck() RETURNS trigger AS $$
-    DECLARE nbrOfRegisterend INT;
+    DECLARE nbrOfRegistered INT;
     DECLARE maxNbrOfStudents INT;
     DECLARE firstStudent VARCHAR;
     BEGIN
@@ -81,21 +81,21 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
 
     IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
     THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course;
-        --limited course
         IF EXISTS(SELECT course FROM restrictedCourse WHERE course = OLD.course) THEN
-            nbrOfRegisterend := (SELECT Count(student)
-                                FROM Registrations
+            nbrOfRegistered := (SELECT Count(student)
+                                FROM isAttending
                                 WHERE course = OLD.course);
 
             maxNbrOfStudents := (SELECT nbrOfStudents 
                                 FROM restrictedCourse
                                 WHERE course = OLD.course);
 
-            IF (nbrOfRegisterend < maxNbrOfStudents) THEN
-                firstStudent := (SELECT student FROM coursequeuepositions WHERE course = OLD.course AND row_number = min(row_number));
+            IF (nbrOfRegistered < maxNbrOfStudents) THEN
+                firstStudent := (SELECT student FROM coursequeuepositions WHERE restrictedCourse = OLD.course AND row_number = 1);
 
                 IF firstStudent IS NOT NULL THEN
                 INSERT INTO isAttending values(firstStudent, OLD.course);
+                DELETE FROM appliedFor WHERE student = firstStudent AND restrictedCourse = OLD.course;
                 END IF;
             END IF;
         END IF;
