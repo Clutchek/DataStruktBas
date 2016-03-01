@@ -82,7 +82,7 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
     IF EXISTS(SELECT student FROM isAttending WHERE student = OLD.student AND course = OLD.course)
     THEN DELETE FROM isAttending WHERE student = OLD.student AND course = OLD.course;
         --limited course
-        IF EXISTS(SELECT course FROM requiredCourse WHERE course = OLD.course) THEN
+        IF EXISTS(SELECT course FROM restrictedCourse WHERE course = OLD.course) THEN
             nbrOfRegisterend := (SELECT Count(student)
                                 FROM Registrations
                                 WHERE course = OLD.course);
