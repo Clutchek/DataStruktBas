@@ -8,8 +8,12 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
     BEGIN
 
         --null, kurskod existerar
-        IF NEW.student IS NULL OR NEW.course IS NULL THEN
-            RAISE EXCEPTION 'Input was null';
+        IF NEW.student IS NULL THEN
+            RAISE EXCEPTION 'Student in input was null';
+        END IF;
+
+        IF NEW.course IS NULL THEN
+            RAISE EXCEPTION 'Course in input was null';
         END IF;
 
         IF NOT EXISTS(SELECT course FROM course WHERE course.coursecode = NEW.course) THEN
@@ -22,8 +26,9 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
 
         IF EXISTS(SELECT student FROM isAttending WHERE isAttending.student = New.student AND isAttending.course = NEW.course)
         OR EXISTS(SELECT student FROM PassedCourses WHERE PassedCourses.student = New.student AND PassedCourses.coursecode = NEW.course)
+        OR EXISTS(SELECT student FROM PassedCourses WHERE appliedFor.student = New.student AND appliedFor.restrictedCourse = NEW.course)
         THEN
-            RAISE EXCEPTION '% is already attending or have passed this course', NEW.student;
+            RAISE EXCEPTION '% have already applied for this course, is attending the course or have passed this course', NEW.student;
         END IF;
 
         nbrOfRequiredCourses := (SELECT COUNT(course) FROM prerequisites WHERE course = NEW.course);
