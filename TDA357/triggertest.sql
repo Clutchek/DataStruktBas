@@ -1,4 +1,4 @@
---Rimliga tester
+
 \! echo "---Tests for first trigger---"
 \! echo ""
 
@@ -71,29 +71,29 @@ Select * from Registrations;
 \! echo "";
 
 
-\! echo "Test1: DELETE student who is not registrated";
+\! echo "Test1: DELETE student '941208-1337' who is not regisered to 'MMA321'";
 	DELETE FROM Registrations WHERE course = 'MMA321' AND student = '941208-1337';
 	SELECT * FROM Registrations;
 \! echo "";
-\! echo "Test2: DELETE student who is registrated";
+\! echo "Test2: DELETE student '941201-1337' who is regisered to 'MMA321'";
 
 	DELETE FROM Registrations WHERE course = 'MMA321' AND student = '941201-1337';
 	SELECT * FROM Registrations;
 \! echo "";
-\! echo "Test3: DELETE student who is wating";
+\! echo "Test3: DELETE student '941203-1337' who is waiting for 'MMA321' ";
 
 	DELETE FROM Registrations WHERE course = 'MMA321' AND student = '941203-1337';
 	SELECT * FROM Registrations;
 \! echo "";
-\! echo "Test4: DELETE from course who is overfull";
+\! echo "Test4: DELETE from course 'MMA321' who is overfull ";
 	INSERT INTO Registrations values ('MMA321','941201-1337',null);
 	INSERT INTO isAttending values ('941203-1337','MMA321');
 
 	SELECT * FROM Registrations;
 
+	\! echo "Student '941204-1337' should still have status 'waiting' on course 'MMA321', because course has been overfull";
+
 	DELETE FROM Registrations WHERE course = 'MMA321' AND student = '941203-1337';
 
-
-\! echo "Student '941204-1337' should still have status 'waiting' on course 'MMA321', because course has been over full";
 	SELECT * FROM Registrations;
 \! echo "";

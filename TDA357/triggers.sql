@@ -7,7 +7,6 @@ CREATE FUNCTION regCheck() RETURNS trigger AS $$
 
     BEGIN
 
-        --null, kurskod existerar
         IF NEW.student IS NULL THEN
             RAISE EXCEPTION 'Student in input was null';
         END IF;
@@ -73,7 +72,6 @@ CREATE FUNCTION unregCheck() RETURNS trigger AS $$
     DECLARE firstStudent VARCHAR;
     BEGIN
 
-    --Kanske kolla efter nullvärden?
 
     IF EXISTS(SELECT student FROM appliedFor WHERE student = OLD.student AND restrictedCourse = OLD.course)
     THEN DELETE FROM appliedFor WHERE student = OLD.student AND restrictedCourse = OLD.course;
