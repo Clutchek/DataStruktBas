@@ -15,12 +15,18 @@ public class DirectedGraph<E extends Edge> {
         private List<E> path;
         private final double distance;
 
+        /**
+         *  Element used in Dijkstra's algorithm to find the shortest path starting from node.
+         */
         private DijkstraElement(int node, List<E> path, double distance){
             this.node = node;
             this.path = path;
             this.distance = distance;
         }
 
+        /**
+         * Returns the total distance of the path belonging to this element.
+         */
         public double getDistance() {
             return distance;
         }
@@ -30,7 +36,9 @@ public class DirectedGraph<E extends Edge> {
 		edges.add(e);
 	}
 
-    //Dayjsktsrats algoritm
+    /**
+     * Method to find the shortestPath between 2 nodes. Utilises Dijkstra's algorithm.
+     */
 	public Iterator<E> shortestPath(int from, int to) {
 
         //create list representing if nodes have been visited
@@ -41,13 +49,14 @@ public class DirectedGraph<E extends Edge> {
 		PriorityQueue<DijkstraElement> priorityQueue = new PriorityQueue<DijkstraElement>(new CompDijkstraPath());
         //add startnode to pq
         priorityQueue.add(new DijkstraElement(from, new ArrayList<E>(), 0));
-        DijkstraElement element;    
+        DijkstraElement element;
 
         while(!priorityQueue.isEmpty()){
             do {
                 element = priorityQueue.poll();
             } while(!priorityQueue.isEmpty() && nodeVisited[element.node]);
 
+            //The loops should end if our list is empty and the last node was already visited.
             if(!priorityQueue.isEmpty() || !nodeVisited[element.node]){
                 if(element.node == to){
                     return element.path.iterator();
@@ -55,7 +64,7 @@ public class DirectedGraph<E extends Edge> {
                 nodeVisited[element.node] = true;
                 for(E e: edges){
                     if(e.getSource() == element.node && (!nodeVisited[e.getDest()])){
-                        //create the new path
+                        //create the new path and add new edge
                         List<E> newPath = new ArrayList<E>(element.path);
                         newPath.add(e);
                         DijkstraElement queueElement = new DijkstraElement(e.getDest(), newPath, element.distance + e.getWeight());
@@ -64,14 +73,15 @@ public class DirectedGraph<E extends Edge> {
                 }
             }
         }
-        //Should never happen unless the graph is not sammanhänging
+        //Should never happen unless the graph is not connected
         return null;
 	}
 
-	//Kruskals algoritm
+    /**
+     * Method to create an MST. Utilises Kruskal's algorithm.
+     */
 	public Iterator<E> minimumSpanningTree() {
         //skapa array for alla noder
-
         ArrayList<E>[] nodes = new ArrayList[NUMBER_OF_NODES];
         for(int i = 0; i < nodes.length; i++){
             nodes[i] = new ArrayList<E>();
@@ -96,6 +106,7 @@ public class DirectedGraph<E extends Edge> {
                 }
             }while(listNotEmpty && nodeCompare);
 
+            //If the list is empty, we should just end our loops and return our result.
             if(listNotEmpty) {
                 ArrayList<E> lk;
                 ArrayList<E> ll;
