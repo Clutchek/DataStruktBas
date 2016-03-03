@@ -1,5 +1,8 @@
 import java.util.Comparator;
 
+/**
+ * Comparator to compare different edges.
+ */
 public class CompKruskalEdge implements Comparator<Edge> {
 
     @Override
