@@ -14,8 +14,8 @@ import java.io.*;  // Reading user input.
 public class StudentPortal
 {
     /* TODO Here you should put your database name, username and password */
-    static final String USERNAME = "";
-    static final String PASSWORD = "";
+    static final String USERNAME = "tda357_042";
+    static final String PASSWORD = "TQAz5SxP";
 
     /* Print command usage.
      * /!\ you don't need to change this function! */
@@ -81,6 +81,14 @@ public class StudentPortal
     static void getInformation(Connection conn, String student) throws SQLException
     {
         // TODO: Your implementation here
+        PreparedStatement st =
+                conn.prepareStatement("SELECT * FROM StudentsFollowing WHERE personalCodeNumber  = ?") ;
+        st.setString(1,student) ;
+        ResultSet rs = st.executeQuery() ;
+        if (rs.next())
+            System.out.println(rs.getString(1)) ;
+        rs.close() ;
+        st.close() ;
     }
 
     /* Register: Given a student id number and a course code, this function
