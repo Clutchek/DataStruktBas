@@ -1,12 +1,12 @@
 import java.util.Comparator;
 
-public class CompKruskalEdge implements Comparator<BusEdge> {
+public class CompKruskalEdge implements Comparator<Edge> {
 
     @Override
-    public int compare(BusEdge b1, BusEdge b2) {
+    public int compare(Edge b1, Edge b2) {
         if(b1.getWeight() > b2.getWeight()){
             return 1;
-        }else if(b2.getWeight() > b1.getWeight()){
+        }else if(b1.getWeight() < b2.getWeight()){
             return -1;
         }else{
             return 0;
