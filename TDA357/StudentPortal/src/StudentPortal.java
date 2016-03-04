@@ -41,11 +41,11 @@ public class StudentPortal
 
             String student = args[0]; // This is the identifier for the student.
 
-            Console console = System.console();
+            Scanner scanner = new Scanner(System.in);
             usage();
             System.out.println("Welcome!");
             while(true) {
-                String mode = console.readLine("? > ");
+                String mode = scanner.nextLine();
                 String[] cmd = mode.split(" +");
                 cmd[0] = cmd[0].toLowerCase();
                 if ("information".startsWith(cmd[0]) && cmd.length == 1) {
@@ -84,8 +84,52 @@ public class StudentPortal
                 conn.prepareStatement("SELECT * FROM StudentsFollowing WHERE personalCodeNumber  = ?") ;
         st.setString(1,student) ;
         ResultSet rs = st.executeQuery() ;
-        if (rs.next())
-            System.out.println(rs.getString(1)) ;
+        while(rs.next()) {
+            //Retrieve by column name
+            String name  = rs.getString("name");
+            String loginId  = rs.getString("loginId");
+            String line  = rs.getString("studyProgramme");
+            String branch  = rs.getString("branch");
+
+            System.out.println("Information for student "+ student);
+            System.out.println("-------------------------------------");
+
+            //Display values
+            System.out.println("Name: " + name);
+            System.out.println("Student ID: " + loginId);
+            System.out.println("Line: " + line);
+            System.out.println("Branch: " + branch);
+
+        }
+        System.out.println();
+        System.out.println();
+
+
+        System.out.println("Read courses (name (code), credits: grade):");
+        st = conn.prepareStatement("SELECT * FROM FinishedCourses WHERE student  = ?") ;
+        st.setString(1,student) ;
+        rs = st.executeQuery() ;
+        while(rs.next()) {
+
+            String courseName  = rs.getString("name");
+            String courseCode  = rs.getString("coursecode");
+            String credits  = rs.getString("credits");
+            String grade  = rs.getString("grade");
+            System.out.println(courseName +" ("+courseCode+"), " + credits +"p: "+ grade);
+
+        }
+        System.out.println();
+        System.out.println();
+
+        st = conn.prepareStatement("SELECT * FROM Registrations WHERE student  = ?") ;
+        st.setString(1,student) ;
+        rs = st.executeQuery() ;
+        System.out.println("Registered courses (name (code), credits: status):");
+        while(rs.next()) {
+
+
+        }
+
         rs.close() ;
         st.close() ;
     }
