@@ -16,7 +16,10 @@ public class DirectedGraph<E extends Edge> {
         private final double distance;
 
         /**
-         *  Element used in Dijkstra's algorithm to find the shortest path starting from node.
+         * Element used in Dijkstra's algorithm to find the shortest path starting from node.
+         * @param node current node chosen by the algorithm
+         * @param path represents the path leading up to 'node' from the starting node
+         * @param distance the distance of the path.
          */
         private DijkstraElement(int node, List<E> path, double distance){
             this.node = node;
@@ -26,6 +29,7 @@ public class DirectedGraph<E extends Edge> {
 
         /**
          * Returns the total distance of the path belonging to this element.
+         * @return the distance of the path belonging to this node.
          */
         public double getDistance() {
             return distance;
@@ -33,11 +37,15 @@ public class DirectedGraph<E extends Edge> {
     }
 
 	public void addEdge(E e) {
+        //store new edge in our list
 		edges.add(e);
 	}
 
     /**
      * Method to find the shortestPath between 2 nodes. Utilises Dijkstra's algorithm.
+     * @param from represents node in which the path starts in.
+     * @param to represents node in which the path ends in.
+     * @return iterator that iterates over the shortest path between the nodes.
      */
 	public Iterator<E> shortestPath(int from, int to) {
 
@@ -63,6 +71,7 @@ public class DirectedGraph<E extends Edge> {
                 }
                 nodeVisited[element.node] = true;
                 for(E e: edges){
+                    //Find edges that start in our new node and that doesn't lead to an already visited node.
                     if(e.getSource() == element.node && (!nodeVisited[e.getDest()])){
                         //create the new path and add new edge
                         List<E> newPath = new ArrayList<E>(element.path);
@@ -78,7 +87,8 @@ public class DirectedGraph<E extends Edge> {
 	}
 
     /**
-     * Method to create an MST. Utilises Kruskal's algorithm.
+     * Method to create an MST from our DirectedGraph. Utilises Kruskal's algorithm.
+     * @return iterator that iterates over the MST computed by the algorithm.
      */
 	public Iterator<E> minimumSpanningTree() {
         //skapa array for alla noder
@@ -127,7 +137,7 @@ public class DirectedGraph<E extends Edge> {
                 }
             }
         }
-
+        //can return any element's iterator in our array since they will all be pointing to the same list when the algorithm is done. (And the tree is fully connected)
         return nodes[0].iterator();
 	}
 

@@ -1,7 +1,7 @@
 import java.util.Comparator;
 
 /**
- * Created by clutchek on 3/3/16.
+ * Comparator to compare different DijkstraElemets.
  */
 public class CompDijkstraPath implements Comparator<DirectedGraph.DijkstraElement> {
 
