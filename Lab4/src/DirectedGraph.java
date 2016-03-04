@@ -1,12 +1,21 @@
 
 import java.util.*;
 
+/**
+ * Class representing a directed graph.
+ */
 public class DirectedGraph<E extends Edge> {
-    List<E> edges = new ArrayList<E>();
+    List<E>[] edges;
     final int NUMBER_OF_NODES;
 
 	public DirectedGraph(int noOfNodes) {
         NUMBER_OF_NODES = noOfNodes;
+        edges = new ArrayList[NUMBER_OF_NODES];
+        //initializing all lists to an empty list
+        for(int i = 0; i < edges.length; i++){
+            edges[i] = new ArrayList<E>();
+        }
+
 	}
 
     public class DijkstraElement{
@@ -37,8 +46,8 @@ public class DirectedGraph<E extends Edge> {
     }
 
 	public void addEdge(E e) {
-        //store new edge in our list
-		edges.add(e);
+        //store new edge in the list corresponding to the starting node
+        edges[e.getSource()].add(e);
 	}
 
     /**
@@ -70,9 +79,9 @@ public class DirectedGraph<E extends Edge> {
                     return element.path.iterator();
                 }
                 nodeVisited[element.node] = true;
-                for(E e: edges){
+                for(E e: edges[element.node]){
                     //Find edges that start in our new node and that doesn't lead to an already visited node.
-                    if(e.getSource() == element.node && (!nodeVisited[e.getDest()])){
+                    if(!nodeVisited[e.getDest()]){
                         //create the new path and add new edge
                         List<E> newPath = new ArrayList<E>(element.path);
                         newPath.add(e);
@@ -100,8 +109,8 @@ public class DirectedGraph<E extends Edge> {
         CompKruskalEdge compKruskalEdge = new CompKruskalEdge();
 		PriorityQueue<E> priorityQueue = new PriorityQueue<E>(compKruskalEdge);
         //add all edges from graph
-        for(int i = 0; i < edges.size(); i++){
-            priorityQueue.add(edges.get(i));
+        for(List<E> list : edges){
+            priorityQueue.addAll(list);
         }
 
         boolean listNotEmpty = true;
