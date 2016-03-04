@@ -127,9 +127,18 @@ public class StudentPortal
         System.out.println("Registered courses (name (code), credits: status):");
         while(rs.next()) {
 
-
         }
 
+        st = conn.prepareStatement("SELECT * from PathToGraduation WHERE student = ?;");
+        st.setString(1, student);
+        rs = st.executeQuery();
+
+        System.out.println("Seminar courses taken:" + rs.getString("nbrofseminarcourses"));
+        System.out.println("Math credits taken:" + rs.getString("mathCredits"));
+        System.out.println("Research credits taken:" + rs.getString("researchCredits"));
+        System.out.println("Total credits taken:" + rs.getString("totalcredits"));
+        System.out.println("Fulfills the requirements for graduation" + rs.getString("qualifiedforgraduation"));
+        System.out.println("-------------------------------------");
         rs.close() ;
         st.close() ;
     }
