@@ -80,7 +80,6 @@ public class StudentPortal
      */
     static void getInformation(Connection conn, String student) throws SQLException
     {
-        // TODO: Your implementation here
         PreparedStatement st =
                 conn.prepareStatement("SELECT * FROM StudentsFollowing WHERE personalCodeNumber  = ?") ;
         st.setString(1,student) ;
@@ -94,18 +93,49 @@ public class StudentPortal
     /* Register: Given a student id number and a course code, this function
      * should try to register the student for that course.
      */
-    static void registerStudent(Connection conn, String student, String course)
-            throws SQLException
+    static void registerStudent(Connection conn, String student, String course) throws SQLException
     {
-        // TODO: Your implementation here
+        PreparedStatement st =
+                conn.prepareStatement("INSERT INTO Registrations values(?, ?, ?)") ;
+        st.setString(1,course);
+        st.setString(2,student);
+        st.setString(3,null);
+        ResultSet rs = null;
+        try {
+            rs = st.executeQuery();
+        }catch(SQLException e){
+            System.out.println("Student could not be registered");
+        }finally {
+            rs.close();
+            st.close();
+        }
+        PreparedStatement s2 =
+                conn.prepareStatement("SELECT Status FROM Registrations WHERE student = ? AND course = ?");
+        st.setString(1, student);
+        st.setString(2, course);
+        ResultSet r2 = s2.executeQuery();
+        if(rs.getString("Status") == "waiting"){
+            System.out.println("Course "+course +" is full, you are put in the waiting list.");
+        }else if(rs.getString("Status") == "registered"){
+            System.out.println("You are now successfully registered to course " + course);
+        }
+        r2.close();
+        s2.close();
+
     }
 
     /* Unregister: Given a student id number and a course code, this function
      * should unregister the student from that course.
      */
-    static void unregisterStudent(Connection conn, String student, String course)
-            throws SQLException
+    static void unregisterStudent(Connection conn, String student, String course) throws SQLException
     {
-        // TODO: Your implementation here
+        PreparedStatement st =
+                conn.prepareStatement("DELETE FROM Registrations WHERE student = ? AND course = ?") ;
+        st.setString(1,course);
+        st.setString(2,student);
+        ResultSet rs = st.executeQuery();
+        System.out.println("Deleted "+student+" from "+course);
+        rs.close();
+        st.close();
     }
 }
