@@ -133,9 +133,12 @@ public class StudentPortal
                 conn.prepareStatement("DELETE FROM Registrations WHERE student = ? AND course = ?") ;
         st.setString(1,course);
         st.setString(2,student);
-        ResultSet rs = st.executeQuery();
-        System.out.println("Deleted "+student+" from "+course);
-        rs.close();
+        int deletion = st.executeUpdate();
+        if(deletion > 0){
+            System.out.println("Deleted "+student+" from "+course);
+        }else{
+            System.out.println("Deletion failed");
+        }
         st.close();
     }
 }
