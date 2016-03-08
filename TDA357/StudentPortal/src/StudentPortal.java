@@ -121,11 +121,27 @@ public class StudentPortal
         System.out.println();
         System.out.println();
 
-        st = conn.prepareStatement("SELECT * FROM Registrations WHERE student  = ?") ;
+        st = conn.prepareStatement("SELECT * FROM Registrations  WHERE student  = ?") ;
         st.setString(1,student) ;
         rs = st.executeQuery() ;
         System.out.println("Registered courses (name (code), credits: status):");
         while(rs.next()) {
+
+            String courseCode = rs.getString("course");
+            String status = rs.getString("status");
+
+            if(status.equals("waiting")) {
+                PreparedStatement st2 = conn.prepareStatement("SELECT * FROM CourseQueuePositions WHERE student  = ? AND restrictedCourse = ?");
+                st2.setString(1, student);
+                st2.setString(2, courseCode);
+                ResultSet rs2 = st2.executeQuery();
+                if (rs2.next()){
+                    String number = rs2.getString("row_number");
+                System.out.println(courseCode + ",  " + status + " " + number);
+                }
+            }else{
+                System.out.println(courseCode+",  "+ status);
+            }
 
         }
 
