@@ -78,20 +78,19 @@ public class StudentPortal
      * - the mandatory courses that the student has yet to read.
      * - whether or not the student fulfills the requirements for graduation
      */
-    static void getInformation(Connection conn, String student) throws SQLException
-    {
+    static void getInformation(Connection conn, String student) throws SQLException {
         PreparedStatement st =
-                conn.prepareStatement("SELECT * FROM StudentsFollowing WHERE personalCodeNumber  = ?") ;
-        st.setString(1,student) ;
-        ResultSet rs = st.executeQuery() ;
-        while(rs.next()) {
+                conn.prepareStatement("SELECT * FROM StudentsFollowing WHERE personalCodeNumber  = ?");
+        st.setString(1, student);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
             //Retrieve by column name
-            String name  = rs.getString("name");
-            String loginId  = rs.getString("loginId");
-            String line  = rs.getString("studyProgramme");
-            String branch  = rs.getString("branch");
+            String name = rs.getString("name");
+            String loginId = rs.getString("loginId");
+            String line = rs.getString("studyProgramme");
+            String branch = rs.getString("branch");
 
-            System.out.println("Information for student "+ student);
+            System.out.println("Information for student " + student);
             System.out.println("-------------------------------------");
 
             //Display values
@@ -106,55 +105,59 @@ public class StudentPortal
 
 
         System.out.println("Read courses (name (code), credits: grade):");
-        st = conn.prepareStatement("SELECT * FROM FinishedCourses WHERE student  = ?") ;
-        st.setString(1,student) ;
-        rs = st.executeQuery() ;
-        while(rs.next()) {
+        st = conn.prepareStatement("SELECT * FROM FinishedCourses WHERE student  = ?");
+        st.setString(1, student);
+        rs = st.executeQuery();
+        while (rs.next()) {
 
-            String courseName  = rs.getString("name");
-            String courseCode  = rs.getString("coursecode");
-            String credits  = rs.getString("credits");
-            String grade  = rs.getString("grade");
-            System.out.println(courseName +" ("+courseCode+"), " + credits +"p: "+ grade);
+            String courseName = rs.getString("name");
+            String courseCode = rs.getString("coursecode");
+            String credits = rs.getString("credits");
+            String grade = rs.getString("grade");
+            System.out.println(courseName + " (" + courseCode + "), " + credits + "p: " + grade);
 
         }
         System.out.println();
         System.out.println();
 
-        st = conn.prepareStatement("SELECT * FROM Registrations  WHERE student  = ?") ;
-        st.setString(1,student) ;
-        rs = st.executeQuery() ;
+        st = conn.prepareStatement("SELECT * FROM Registrations  WHERE student  = ?");
+        st.setString(1, student);
+        rs = st.executeQuery();
         System.out.println("Registered courses (name (code), credits: status):");
-        while(rs.next()) {
+        while (rs.next()) {
 
             String courseCode = rs.getString("course");
             String status = rs.getString("status");
 
-            if(status.equals("waiting")) {
+            if (status.equals("waiting")) {
                 PreparedStatement st2 = conn.prepareStatement("SELECT * FROM CourseQueuePositions WHERE student  = ? AND restrictedCourse = ?");
                 st2.setString(1, student);
                 st2.setString(2, courseCode);
                 ResultSet rs2 = st2.executeQuery();
-                if (rs2.next()){
+                if (rs2.next()) {
                     String number = rs2.getString("row_number");
-                System.out.println(courseCode + ",  " + status + " " + number);
+                    System.out.println(courseCode + ",  " + status + " " + number);
                 }
-            }else{
-                System.out.println(courseCode+",  "+ status);
+            } else {
+                System.out.println(courseCode + ",  " + status);
             }
 
         }
 
+        System.out.println();
+        System.out.println();
+
         st = conn.prepareStatement("SELECT * from PathToGraduation WHERE student = ?;");
         st.setString(1, student);
         rs = st.executeQuery();
-
-        System.out.println("Seminar courses taken:" + rs.getString("nbrofseminarcourses"));
-        System.out.println("Math credits taken:" + rs.getString("mathCredits"));
-        System.out.println("Research credits taken:" + rs.getString("researchCredits"));
-        System.out.println("Total credits taken:" + rs.getString("totalcredits"));
-        System.out.println("Fulfills the requirements for graduation" + rs.getString("qualifiedforgraduation"));
-        System.out.println("-------------------------------------");
+        while (rs.next()){
+            System.out.println("Seminar courses taken:" + rs.getString("nbrofseminarcourses"));
+            System.out.println("Math credits taken:" + rs.getString("mathCredits"));
+            System.out.println("Research credits taken:" + rs.getString("researchCredits"));
+            System.out.println("Total credits taken:" + rs.getString("totalcredits"));
+            System.out.println("Fulfills the requirements for graduation" + rs.getString("qualifiedforgraduation"));
+            System.out.println("-------------------------------------");
+        }
         rs.close() ;
         st.close() ;
     }
