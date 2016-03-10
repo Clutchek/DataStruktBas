@@ -155,7 +155,7 @@ public class StudentPortal
             System.out.println("Math credits taken:" + rs.getString("mathCredits"));
             System.out.println("Research credits taken:" + rs.getString("researchCredits"));
             System.out.println("Total credits taken:" + rs.getString("totalcredits"));
-            System.out.println("Fulfills the requirements for graduation" + rs.getString("qualifiedforgraduation"));
+            System.out.println("Fulfills the requirements for graduation: " + rs.getString("qualifiedforgraduation"));
             System.out.println("-------------------------------------");
         }
         rs.close() ;
@@ -172,28 +172,39 @@ public class StudentPortal
         st.setString(1,course);
         st.setString(2,student);
         st.setString(3,null);
-        ResultSet rs = null;
+        boolean regFailed = false;
+        int rs = 0;
         try {
-            rs = st.executeQuery();
+            rs = st.executeUpdate();
         }catch(SQLException e){
-            System.out.println("Student could not be registered");
-        }finally {
-            rs.close();
-            st.close();
+            regFailed = true;
+            System.out.println(e.getMessage() + "Student could not be registered");
+            if(st != null){
+                st.close();
+            }
         }
-        PreparedStatement s2 =
-                conn.prepareStatement("SELECT Status FROM Registrations WHERE student = ? AND course = ?");
-        st.setString(1, student);
-        st.setString(2, course);
-        ResultSet r2 = s2.executeQuery();
-        if(rs.getString("Status") == "waiting"){
-            System.out.println("Course "+course +" is full, you are put in the waiting list.");
-        }else if(rs.getString("Status") == "registered"){
-            System.out.println("You are now successfully registered to course " + course);
+        if(!regFailed){
+            PreparedStatement s2 =
+                    conn.prepareStatement("SELECT status FROM Registrations WHERE student = ? AND course = ?");
+            s2.setString(1, student);
+            s2.setString(2, course);
+            ResultSet r2 = s2.executeQuery();
+            if(r2 != null){
+                if(r2.next()){
+                    if(r2.getString("status").equals("waiting")){
+                        System.out.println("Course "+course +" is full, you are put in the waiting list.");
+                    }else if(r2.getString("status").equals("registered")){
+                        System.out.println("You are now successfully registered to course " + course);
+                    }
+                }
+            }
+            if(r2 != null){
+                r2.close();
+            }
+            if(s2 != null){
+                s2.close();
+            }
         }
-        r2.close();
-        s2.close();
-
     }
 
     /* Unregister: Given a student id number and a course code, this function
@@ -203,8 +214,8 @@ public class StudentPortal
     {
         PreparedStatement st =
                 conn.prepareStatement("DELETE FROM Registrations WHERE student = ? AND course = ?") ;
-        st.setString(1,course);
-        st.setString(2,student);
+        st.setString(1,student);
+        st.setString(2,course);
         int deletion = st.executeUpdate();
         if(deletion > 0){
             System.out.println("Deleted "+student+" from "+course);
